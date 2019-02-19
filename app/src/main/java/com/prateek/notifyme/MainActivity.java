@@ -1,6 +1,5 @@
-package com.prateek.letmefeed;
+package com.prateek.notifyme;
 
-import android.app.Application;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -12,7 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.prateek.letmefeed.commons.utils;
+import com.prateek.notifyme.R;
+import com.prateek.notifyme.commons.utils;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btn_notify:
                     // do something when the corky3 is clicked
+
 
                     break;
                 default:

@@ -1,4 +1,4 @@
-package com.prateek.letmefeed;
+package com.prateek.notifyme;
 
 import org.junit.Test;
 
