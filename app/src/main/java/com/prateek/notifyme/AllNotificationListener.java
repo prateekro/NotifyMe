@@ -27,6 +27,10 @@ public class AllNotificationListener extends NotificationListenerService {
         Log.d(TAG, "onNotificationPosted: "+ sbn.getKey());
         //To cancel notification
 //        cancelNotification("0|com.whatsapp|1|null|10117");
+        if (sbn.getKey().equals("0|com.whatsapp|1|null|10117")){
+
+        }
+
         Log.d(TAG, "onNotificationPosted: "+ sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TEXT).toString());
         Log.d(TAG, "onNotificationPosted: "+ sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TITLE).toString());
         Log.d(TAG, "onNotificationPosted: "+ sbn.describeContents());
