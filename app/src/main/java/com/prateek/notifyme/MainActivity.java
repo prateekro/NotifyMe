@@ -7,19 +7,32 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 
-import com.prateek.notifyme.R;
+import com.prateek.notifyme.adapter.AppListElementAdapter;
 import com.prateek.notifyme.commons.utils;
+import com.prateek.notifyme.elements.ListElement;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static ArrayList <ListElement> appList;
+    AppListElementAdapter applistadapter;
+    ListView lv_app;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        appList = new ArrayList<ListElement>();
+
     }
 
     @Override
@@ -29,8 +42,33 @@ public class MainActivity extends AppCompatActivity {
         Log.d(utils.TAG, "onStart: Started");
 
         Button permitButton = (Button) findViewById(R.id.click_permit);
-        permitButton.setOnClickListener(tapFetcher);
         Button notifyButton = (Button) findViewById(R.id.btn_notify);
+
+
+        lv_app = (ListView) findViewById(R.id.rv_app_list_grouped);
+        ListElement listElement = null;
+
+        for (int i = 0; i < 10; i++){
+            listElement  = new ListElement("Time: "+i, "Today: "+i, "Test: "+i, i + "");
+            Log.d(utils.TAG, "onStart: "+ i);
+//            listElement.setAppName("Test: "+i);
+//            listElement.setCounter(i+" ");
+//            listElement.setDate("Today: "+i);
+//            listElement.setTime("Time: "+i);
+
+            appList.add(listElement);
+        }
+
+        applistadapter = new AppListElementAdapter(this, R.layout.list_element, appList);
+        lv_app.setAdapter(applistadapter);
+
+
+
+
+
+
+
+        permitButton.setOnClickListener(tapFetcher);
         Intent intent = new Intent(this, MainActivity.class);
         final PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,0);
 
@@ -51,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
 
 
 
