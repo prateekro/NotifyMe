@@ -66,14 +66,14 @@ public class SignIn extends AppCompatActivity {
                             et_confirm_pass.setVisibility(View.INVISIBLE);
                         }else{
 
-                            startActivity(new Intent(SignIn.this, MainActivity.class));
+//                            startActivity(new Intent(SignIn.this, MainActivity.class));
                         }
                         break;
                     }
                     case  R.id.tv_guest_signin: {
                         // goto MainActivity
 
-                        startActivity(new Intent(SignIn.this, MainActivity.class));
+//                        startActivity(new Intent(SignIn.this, MainActivity.class));
                         break;
                     }
 
