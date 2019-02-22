@@ -18,7 +18,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 //TODO: UX corrections - Issue: form hides signup button
-//TODO:
+//TODO: UX corrections - Issue: when keyboards next tapped on SignUp, app navigates to SignIn. It should perform sign up action
+//TODO: UX - Question: Should the form retain user input when we switch between Signin / Signup?
 public class SignIn extends AppCompatActivity {
 
     //Declarations
