@@ -27,7 +27,7 @@
             </intent-filter>
             android:exported="true">
         </service>
-    </application>s
+    </application>
 
 
 </manifest>
