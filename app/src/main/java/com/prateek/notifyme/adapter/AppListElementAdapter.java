@@ -14,8 +14,6 @@ import com.prateek.notifyme.elements.ListElement;
 
 import java.util.ArrayList;
 
-import static com.prateek.notifyme.MainActivity.appList;
-
 //https://stackoverflow.com/questions/8166497/custom-adapter-for-list-view :: Read : three_horizontal_text_views_layout
 
 //https://www.journaldev.com/10416/android-listview-with-custom-adapter-example-tutorial
