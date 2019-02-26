@@ -168,9 +168,11 @@ public class SignIn extends AppCompatActivity {
         if (currentUser != null) {
             //TODO: Send to dashboard page
             System.out.println("### User logged in!!");
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
         }
         else
-            System.out.println("### Need to sign in!!");
+            System.out.println("### Need to sign in / sign up!!");
     }
 
     @Override

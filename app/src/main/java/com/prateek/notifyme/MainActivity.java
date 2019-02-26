@@ -10,16 +10,20 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.prateek.notifyme.R;
 import com.prateek.notifyme.commons.utils;
 
 public class MainActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -53,7 +57,16 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
+        Button logOut = (Button) findViewById(R.id.log_out);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+                mAuth.signOut();
+                Intent intent = new Intent(getApplicationContext(), SignIn.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private View.OnClickListener tapFetcher = new View.OnClickListener() {
