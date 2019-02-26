@@ -117,6 +117,8 @@ public class SignIn extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             System.out.println("$$$ User created");
+                            Toast.makeText(SignIn.this, "Sign Up Successful",
+                                    Toast.LENGTH_LONG).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
@@ -142,6 +144,8 @@ public class SignIn extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         System.out.println("$$$ User Signed in");
+                        Toast.makeText(SignIn.this, "Sign In Successful",
+                                Toast.LENGTH_LONG).show();
                         FirebaseUser user = mAuth.getCurrentUser();
                         updateUI(user);
                     } else {
