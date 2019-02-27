@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -20,23 +21,44 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.prateek.notifyme.adapter.AppListElementAdapter;
+import com.prateek.notifyme.commons.MySharedPreference;
 import com.prateek.notifyme.commons.utils;
 import com.prateek.notifyme.elements.ListElement;
 
 import java.util.ArrayList;
 
+import static com.prateek.notifyme.AllNotificationListener.appNamesUniqueList;
+
 public class MainActivity extends AppCompatActivity {
 
+    private Intent notificationServiceIntent;
     private ArrayList <ListElement> appList;
     private ListElement listElements;
     private AppListElementAdapter applistadapter;
     private ListView lv_app;
+    public static MySharedPreference mySharedPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        notificationServiceIntent = new Intent(getApplicationContext(), AllNotificationListener.class);
+
+        //Start Service
+        if (!utils.isMyServiceRunning(AllNotificationListener.class, getApplicationContext())) {
+            Log.d(utils.TAG, "onCreate: Service Started");
+            utils.callServiceStart(notificationServiceIntent, getApplicationContext());
+        }else {
+            Log.d(utils.TAG, "onCreate: Service Running already");
+        }
+        //.Start Service
+
         appList = new ArrayList<ListElement>();
+
+        lv_app = (ListView) findViewById(R.id.rv_app_list_grouped);
+
+        mySharedPreference.initSharedPref(MainActivity.this);
 
     }
 
@@ -46,15 +68,6 @@ public class MainActivity extends AppCompatActivity {
 
         Button permitButton = (Button) findViewById(R.id.click_permit);
         Button notifyButton = (Button) findViewById(R.id.btn_notify);
-
-        lv_app = (ListView) findViewById(R.id.rv_app_list_grouped);
-
-        for (int i = 0; i < 10; i++){
-            listElements  = new ListElement("Time: "+i, "Today: "+i, "Test: "+i, i + "");
-            Log.d(utils.TAG, "onStart: "+ i);
-
-            appList.add(listElements);
-        }
 
         applistadapter = new AppListElementAdapter(this, R.layout.list_element, appList);
         lv_app.setAdapter(applistadapter);
@@ -67,12 +80,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent openNotificationListing = new Intent(getApplicationContext(), NotificationListing.class);
                 openNotificationListing.putExtra("TITLE", listElement.getAppName());
                 startActivity(openNotificationListing);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }
         });
-
-
-
-
 
 
 
@@ -98,6 +108,22 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.btn_notify:
                     // do notify
 
+                    //ToDO - Refactor to somewhere - with Trigger by (implement) broadcast receiver on Any notification received - 24/02/2019 - Code by Prateek Rokadiya
+                    if (appNamesUniqueList != null){
+                        int i=0;
+                        for (String appName :appNamesUniqueList){
+                            if (i == 0){
+                                appList.clear();
+                            }
+                            listElements  = new ListElement("Time: "+i, "Today: "+i, appName + " : "+i, 0 + "");
+                            appList.add(listElements);
+                            i++;
+                        }
+                    }
+                    applistadapter.notifyDataSetInvalidated();
+                    applistadapter.notifyDataSetChanged();
+                    //ToDO - Refactor to somewhere - code
+
                     //showNotification();
                     break;
                 default:
@@ -105,5 +131,4 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
-
 }

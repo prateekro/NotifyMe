@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Map;
+
 //How to Use
 //
 // public static final String ABC = "ABC"; //-- Mention this line here in Shared preference
@@ -45,8 +47,19 @@ public class MySharedPreference {
         mEditor.putBoolean(mKey, mValue);
         mEditor.commit();
     }
+
     public static boolean getBoolValue(String mKey) {
         return mSharedPreferences.getBoolean(mKey, true);
+    }
+    public static Map getAll() {
+        try {
+            return mSharedPreferences.getAll();
+        }catch (Exception e){
+            return null;
+        }
+//        if (mSharedPreferences != null)
+//            return mSharedPreferences.getAll();
+//        else return null;
     }
 
 }
