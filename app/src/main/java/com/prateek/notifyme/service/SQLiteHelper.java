@@ -90,5 +90,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         return data;
     }
 
+    public Cursor getAppNotifications(String appName) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String whereVal = "'" + appName + "'";
+        String query = "SELECT "+ NOTIFICATION_COL4 +", "+ NOTIFICATION_COL2 +" FROM "+NOTIFICATION_TABLE_NAME + " WHERE "+ NOTIFICATION_COL3+"="+whereVal;
+        Cursor data = db.rawQuery(query, null);
+        return data;
+    }
+
 }
     

@@ -26,23 +26,35 @@ public class NotificationService {
 
     }
 
-    //retrieve all app listings along with their unread counter for dashboard page
-    //private Map<Application, unreadCounter> getAppListing()
-
-    //on app tap from dashboard, the unread counter should reset
-    public void resetCounter(String appName){
-
+    public boolean checkExistingApp(String appName) {
+        return false;
     }
 
-    //get all stored notifications
-    public HashMap<String, Integer> getNotifications(){
+    //
+    public HashMap<String, Integer> getAppNotifications(String appName) {
+        HashMap<String, Integer> textMap = new HashMap<String, Integer>();
+        Cursor data = mDatabaseHelper.getAppNotifications(appName);
+        while (data.moveToNext()) {
+            // get all names and put in list
+            textMap.put(data.getString(1), data.getInt(2));
+        }
+        return textMap;
+    }
+
+    //retrieve all app listings along with their unread counter for dashboard page
+    public HashMap<String, Integer> getAllNotifications(){
         Cursor data = mDatabaseHelper.getApplicationListingData();
         HashMap<String, Integer> listData = new HashMap<String, Integer>();
         while (data.moveToNext()) {
             // get all names and put in list
-            listData.put(data.getString(2), data.getInt(7));
+            listData.put(data.getString(1), data.getInt(2));
         }
         return listData;
+    }
+
+    //on app tap from dashboard, the unread counter should reset
+    public void resetCounter(String appName){
+
     }
 
     //delete all notifications of a particular app
