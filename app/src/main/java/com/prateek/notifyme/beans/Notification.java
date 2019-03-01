@@ -9,12 +9,27 @@ public class Notification {
     private String text;
     private String appId;
 
-    public Notification(String id, String appId, Date timestamp, String appName, String text) {
+
+
+
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
+
+
+
+    public Notification(String id, Date timestamp, String appName, String text, String appId) {
         this.id = id;
         this.timestamp = timestamp;
         this.appName = appName;
         this.text = text;
         this.appId = appId;
+
     }
 
     public String getId() {
@@ -49,12 +64,5 @@ public class Notification {
         this.text = text;
     }
 
-    public String getAppId() {
-        return appId;
-    }
-
-    public void setAppId(String appId) {
-        this.appId = appId;
-    }
-
+    //private String category;
 }
