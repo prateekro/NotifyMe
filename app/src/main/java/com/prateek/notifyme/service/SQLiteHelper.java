@@ -2,6 +2,7 @@ package com.prateek.notifyme.service;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
@@ -82,7 +83,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS "+ APPLICATION_TABLE_NAME);
     }
 
-
+    public Cursor getApplicationListingData() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        String query = "SELECT "+ APPLICATION_COL2 +", "+ APPLICATION_COL7 +" FROM "+NOTIFICATION_TABLE_NAME;
+        Cursor data = db.rawQuery(query, null);
+        return data;
+    }
 
 }
     

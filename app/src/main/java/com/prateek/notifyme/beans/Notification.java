@@ -10,9 +10,6 @@ public class Notification {
     private String appId;
 
 
-
-
-
     public String getAppId() {
         return appId;
     }
