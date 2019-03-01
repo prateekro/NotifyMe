@@ -7,33 +7,36 @@ import java.util.List;
 
 public class NotificationService {
     //on receiving every notification, save target app, notification text, timestamp, priority, unreadCounter
-    public void saveNotification(Notification notification){
+    private void saveNotification(Notification notification){
 
     }
 
+    //retrieve all app listings along with their unread counter for dashboard page
+    //private Map<Application, unreadCounter> getAppListing()
+
     //on app tap from dashboard, the unread counter should reset
-    public void resetCounter(String appName){
+    private void resetCounter(String appName){
 
     }
 
     //get all stored notifications
-    public List<Notification> getNotifications(){
+    private List<Notification> getNotifications(){
 
         return null;
     }
 
     //delete all notifications of a particular app
-    public void deleteNotification(String appName){
+    private void deleteNotification(String appName){
 
     }
 
     //delete all notifications
-    public void clearAllNotifications(){
+    private void clearAllNotifications(){
 
     }
 
     //delete a particular notification
-    public void deleteNotification(Notification notification){
+    private void deleteNotification(Notification notification){
 
     }
 }
