@@ -60,12 +60,26 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 USER_COL5+ "TEXT NOT NULL," +
                 USER_COL6+ "TEXT NOT NULL" +"); ";
         db.execSQL(createTable_user);
+
+        String createTable_application ="CREATE TABLE " + APPLICATION_TABLE_NAME+ " (" +
+                APPLICATION_COL1+ "TEXT PRIMARY KEY, "+
+                APPLICATION_COL2+ "TEXT PRIMARY KEY, "+
+                APPLICATION_COL3+ "TEXT PRIMARY KEY, "+
+                APPLICATION_COL4+ "TEXT PRIMARY KEY, "+
+                APPLICATION_COL5+ "TEXT PRIMARY KEY, "+
+                APPLICATION_COL6+ "TEXT PRIMARY KEY, "+
+                APPLICATION_COL7+ "TEXT PRIMARY KEY, "+
+                APPLICATION_COL8+ "DATETIME PRIMARY KEY, "+
+                APPLICATION_COL9+ "DATETIME PRIMARY KEY, "+
+                APPLICATION_COL10+ "TEXT NOT NULL" +"); ";
+        db.execSQL(createTable_application);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS "+ USER_TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS "+ NOTIFICATION_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS "+ APPLICATION_TABLE_NAME);
     }
 
 
