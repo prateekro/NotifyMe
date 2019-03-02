@@ -1,57 +1,93 @@
 package com.prateek.notifyme;
 
+import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import com.prateek.notifyme.R;
+import com.prateek.notifyme.adapter.AppListElementAdapter;
+import com.prateek.notifyme.commons.MySharedPreference;
 import com.prateek.notifyme.commons.utils;
+import com.prateek.notifyme.elements.ListElement;
+
+import java.util.ArrayList;
+
+import static com.prateek.notifyme.AllNotificationListener.appNamesUniqueList;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Intent notificationServiceIntent;
+    private ArrayList <ListElement> appList;
+    private ListElement listElements;
+    private AppListElementAdapter applistadapter;
+    private ListView lv_app;
+    public static MySharedPreference mySharedPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        notificationServiceIntent = new Intent(getApplicationContext(), AllNotificationListener.class);
+
+        //Start Service
+        if (!utils.isMyServiceRunning(AllNotificationListener.class, getApplicationContext())) {
+            Log.d(utils.TAG, "onCreate: Service Started");
+            utils.callServiceStart(notificationServiceIntent, getApplicationContext());
+        }else {
+            Log.d(utils.TAG, "onCreate: Service Running already");
+        }
+        //.Start Service
+
+        appList = new ArrayList<ListElement>();
+
+        lv_app = (ListView) findViewById(R.id.rv_app_list_grouped);
+
+        mySharedPreference.initSharedPref(MainActivity.this);
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        Log.d(utils.TAG, "onStart: Started");
-
         Button permitButton = (Button) findViewById(R.id.click_permit);
-        permitButton.setOnClickListener(tapFetcher);
         Button notifyButton = (Button) findViewById(R.id.btn_notify);
-        Intent intent = new Intent(this, MainActivity.class);
-        final PendingIntent pendingIntent = PendingIntent.getActivity(this,0,intent,0);
 
-        notifyButton.setOnClickListener(new View.OnClickListener() {
+        applistadapter = new AppListElementAdapter(this, R.layout.list_element, appList);
+        lv_app.setAdapter(applistadapter);
+
+        lv_app.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-
-
-                NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(getApplicationContext())
-                                .setSmallIcon(R.drawable.ic_launcher_background)
-                                .setContentTitle("Notification Title")
-                                .setContentText("Notification here is read")
-                                .setContentIntent(pendingIntent);
-
-                NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.notify(0, mBuilder.build());
-
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                ListElement listElement = appList.get(position);
+                Toast.makeText(MainActivity.this, listElement.getAppName() +" :: date "+ listElement.getDate(), Toast.LENGTH_SHORT).show();
+                Intent openNotificationListing = new Intent(getApplicationContext(), NotificationListing.class);
+                openNotificationListing.putExtra("TITLE", listElement.getAppName());
+                startActivity(openNotificationListing);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }
         });
 
+
+
+        permitButton.setOnClickListener(tapFetcher);
+        notifyButton.setOnClickListener(tapFetcher);
 
 
     }
@@ -65,14 +101,30 @@ public class MainActivity extends AppCompatActivity {
             switch (v.getId() /*to get clicked view id**/) {
                 case R.id.click_permit:
 
-                    // do something when the corky is clicked
+                    // Call for permission
                     startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
 
                     break;
                 case R.id.btn_notify:
-                    // do something when the corky3 is clicked
+                    // do notify
 
+                    //ToDO - Refactor to somewhere - with Trigger by (implement) broadcast receiver on Any notification received - 24/02/2019 - Code by Prateek Rokadiya
+                    if (appNamesUniqueList != null){
+                        int i=0;
+                        for (String appName :appNamesUniqueList){
+                            if (i == 0){
+                                appList.clear();
+                            }
+                            listElements  = new ListElement("Time: "+i, "Today: "+i, appName + " : "+i, 0 + "");
+                            appList.add(listElements);
+                            i++;
+                        }
+                    }
+                    applistadapter.notifyDataSetInvalidated();
+                    applistadapter.notifyDataSetChanged();
+                    //ToDO - Refactor to somewhere - code
 
+                    //showNotification();
                     break;
                 default:
                     break;
