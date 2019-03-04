@@ -18,8 +18,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ListView;
+import android.widget.Toast;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.prateek.notifyme.R;
+import android.widget.Toast;
+import com.prateek.notifyme.adapter.AppListElementAdapter;
+import com.prateek.notifyme.commons.MySharedPreference;
+import com.google.firebase.auth.FirebaseAuth;
+import com.prateek.notifyme.R;
 import com.prateek.notifyme.adapter.AppListElementAdapter;
 import com.prateek.notifyme.commons.MySharedPreference;
 import com.prateek.notifyme.commons.utils;
@@ -30,6 +39,7 @@ import java.util.ArrayList;
 import static com.prateek.notifyme.AllNotificationListener.appNamesUniqueList;
 
 public class MainActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
 
     private Intent notificationServiceIntent;
     private ArrayList <ListElement> appList;
@@ -42,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         notificationServiceIntent = new Intent(getApplicationContext(), AllNotificationListener.class);
 
@@ -59,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
         lv_app = (ListView) findViewById(R.id.rv_app_list_grouped);
 
         mySharedPreference.initSharedPref(MainActivity.this);
+
+        mAuth = FirebaseAuth.getInstance();
 
     }
 
@@ -89,7 +102,16 @@ public class MainActivity extends AppCompatActivity {
         permitButton.setOnClickListener(tapFetcher);
         notifyButton.setOnClickListener(tapFetcher);
 
-
+        Button logOut = (Button) findViewById(R.id.log_out);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+                mAuth.signOut();
+                Intent intent = new Intent(getApplicationContext(), SignIn.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private View.OnClickListener tapFetcher = new View.OnClickListener() {
