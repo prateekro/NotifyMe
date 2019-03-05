@@ -2,6 +2,7 @@ package com.prateek.notifyme.service;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -9,6 +10,8 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.prateek.notifyme.beans.Notification;
+
+import java.util.Date;
 
 public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String TAG = "DatabaseHelper";
@@ -96,6 +99,76 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         String query = "SELECT "+ NOTIFICATION_COL4 +", "+ NOTIFICATION_COL2 +" FROM "+NOTIFICATION_TABLE_NAME + " WHERE "+ NOTIFICATION_COL3+"="+whereVal;
         Cursor data = db.rawQuery(query, null);
         return data;
+    }
+
+    // saves the notification in NOTIFICATION_TABLE_NAME
+    public boolean saveNotificationDB(String id, String appName, String time, String text, String appId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(NOTIFICATION_COL1, id);
+        values.put(NOTIFICATION_COL2, appName);
+        values.put(NOTIFICATION_COL3, time);
+        values.put(NOTIFICATION_COL4, text);
+        values.put(NOTIFICATION_COL5, appId);
+        long result = db.insert(NOTIFICATION_TABLE_NAME, null, values);
+        if (result == -1)
+            return false;
+        else
+            return true;
+    }
+    // checks whether the notfication's application is present in the APPLICATION_TABLE_NAME (DashBoard)
+    public boolean isAppPresent(String appId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select * from "+ APPLICATION_TABLE_NAME+" where UPPER("+APPLICATION_COL1+") = ?"
+                ,new String[]{appId.toUpperCase()});
+        if(res.getCount()>0){
+            return true;
+        }
+        return false;
+
+    }
+    // updates the APPLICATION_TABLE_NAME with incremented unread counter
+    public boolean updateAppTable(String appId,int unreadNotificationsCount){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(APPLICATION_COL7, unreadNotificationsCount+1);
+        long result = db.update(APPLICATION_TABLE_NAME, values, "UPPER("+APPLICATION_COL1+") = ?", new String[]{appId});
+        if (result <=0)
+            return false;
+        else
+            return true;
+
+
+    }
+
+    public Cursor getUnreadNotificationCount(String appId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor res = db.rawQuery("select "+APPLICATION_COL7 +" from " + APPLICATION_TABLE_NAME+" where UPPER("
+                +APPLICATION_COL1+") = ?" ,new String[]{appId.toUpperCase()});
+
+        return res;
+    }
+
+    // Fetch attributes like priority, category to be inserted into the APPLICATION_TABLE_NAME
+    public boolean insertApp(String appId, String appName, String priority, String enabled, String category,String totalNotifications,
+                             String unreadNotifications, String lastNotificationTimestamp, String readTimestamp, String userId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(APPLICATION_COL1, appId);
+        values.put(APPLICATION_COL2, appName);
+        values.put(APPLICATION_COL3, priority);
+        values.put(APPLICATION_COL4, enabled);
+        values.put(APPLICATION_COL5, category);
+        values.put(APPLICATION_COL6, totalNotifications);
+        values.put(APPLICATION_COL7, unreadNotifications);
+        values.put(APPLICATION_COL8, lastNotificationTimestamp);
+        values.put(APPLICATION_COL9, readTimestamp);
+        values.put(APPLICATION_COL10, userId);
+        long result = db.insert(APPLICATION_TABLE_NAME, null, values);
+        if (result == -1)
+            return false;
+        else
+            return true;
     }
 
 }

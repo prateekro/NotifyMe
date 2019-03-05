@@ -1,6 +1,7 @@
 package com.prateek.notifyme.service;
 
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.prateek.notifyme.beans.Notification;
 import com.prateek.notifyme.beans.User;
@@ -17,9 +18,21 @@ public class NotificationService {
     public void saveNotification(Notification notification){
         String id = notification.getId();
         String appName = notification.getAppName();
-        Date time = notification.getTimestamp();
+        String time = notification.getTimestamp().toString();
         String text = notification.getText();
         String appId = notification.getAppId();
+        //boolean variable for checking the success of events
+        boolean isUpdated, isAppInserted, isNotificationSuccess ;
+        isNotificationSuccess = mDatabaseHelper.saveNotificationDB(id, appName, time, text, appId);
+        if(mDatabaseHelper.isAppPresent(appId)){
+            Cursor cur = mDatabaseHelper.getUnreadNotificationCount(appId);
+            isUpdated = mDatabaseHelper.updateAppTable(appId,Integer.parseInt(cur.getString(0)));
+        }
+        else{
+            isAppInserted = mDatabaseHelper.insertApp(appId, appName, "High", "",
+                    "","","","","","101" );
+        }
+
 
         //TODO: add "if not on the app's notification listing page", only then update unread counter
         //check whether app name entry already exists in Application DB, if not save it, if yes update and "if not on the app's notification listing page", only then update unread counter
