@@ -172,6 +172,8 @@ public class SignIn extends AppCompatActivity {
             System.out.println("### User logged in!!");
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
+            finish();
+            overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
         }
         else
             System.out.println("### Need to sign in / sign up!!");
@@ -185,6 +187,7 @@ public class SignIn extends AppCompatActivity {
         }else{
             super.onBackPressed();
             finish();
+            overridePendingTransition(R.anim.slide_to_right, R.anim.slide_from_left);
         }
 
     }
