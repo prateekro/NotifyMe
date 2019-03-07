@@ -4,20 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SettingPageActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".SubSettingPageActivity">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="S E T T I N G S"
+        android:text="App Configure"
+        android:textSize="25dp"
         android:textAlignment="center"
-        android:textSize="30dp"
-        android:background="@drawable/back"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
     <ListView
-        android:id="@+id/settingDataView"
+        android:id="@+id/list_view_with_checkbox"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="fill_parent"
+        android:clickable="true"/>
 </LinearLayout>
