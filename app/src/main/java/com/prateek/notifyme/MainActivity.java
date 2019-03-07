@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -33,8 +34,12 @@ import com.prateek.notifyme.adapter.AppListElementAdapter;
 import com.prateek.notifyme.commons.MySharedPreference;
 import com.prateek.notifyme.commons.utils;
 import com.prateek.notifyme.elements.ListElement;
+import com.prateek.notifyme.service.NotificationService;
+import com.prateek.notifyme.service.SQLiteHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 import static com.prateek.notifyme.AllNotificationListener.appNamesUniqueList;
 
@@ -42,11 +47,12 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     private Intent notificationServiceIntent;
-    private ArrayList <ListElement> appList;
+    public ArrayList <ListElement> appList;
     private ListElement listElements;
-    private AppListElementAdapter applistadapter;
+    AppListElementAdapter applistadapter;
     private ListView lv_app;
     public static MySharedPreference mySharedPreference;
+//    public static SQLiteHelper mDatabaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         notificationServiceIntent = new Intent(getApplicationContext(), AllNotificationListener.class);
+//        mDatabaseHelper = new SQLiteHelper(getApplicationContext(),null,null, 1);
 
         //Start Service
         if (!utils.isMyServiceRunning(AllNotificationListener.class, getApplicationContext())) {
@@ -129,22 +136,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btn_notify:
                     // do notify
-
-                    //ToDO - Refactor to somewhere - with Trigger by (implement) broadcast receiver on Any notification received - 24/02/2019 - Code by Prateek Rokadiya
-                    if (appNamesUniqueList != null){
-                        int i=0;
-                        for (String appName :appNamesUniqueList){
-                            if (i == 0){
-                                appList.clear();
-                            }
-                            listElements  = new ListElement("Time: "+i, "Today: "+i, appName + " : "+i, 0 + "");
-                            appList.add(listElements);
-                            i++;
-                        }
-                    }
-                    applistadapter.notifyDataSetInvalidated();
-                    applistadapter.notifyDataSetChanged();
                     //ToDO - Refactor to somewhere - code
+                    updateListOfNotifications();
 
                     //showNotification();
                     break;
@@ -153,4 +146,40 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+    public void updateListOfNotifications(){
+
+        Log.d(utils.TAG, "%%%%%%%: ");
+        NotificationService notificationService = new NotificationService(getApplicationContext());
+        HashMap<String, Integer> myAllNotifications = notificationService.getAllNotifications();
+        Set appNames = myAllNotifications.keySet();
+        Log.d(utils.TAG, "%%%%%%%: KEYS "+ appNames);
+        int i=0;
+        for(Object appName: appNames) {
+            if (i == 0){
+                appList.clear();
+            }
+            Log.d(utils.TAG, "onClick: App: "+ appName.toString()+" Unread: "+myAllNotifications.get(appName));
+            listElements  = new ListElement(" ", " ", appName.toString(), myAllNotifications.get(appName).toString());
+            appList.add(listElements);
+            i++;
+        }
+        applistadapter.notifyDataSetInvalidated();
+        applistadapter.notifyDataSetChanged();
+
+        //ToDO - Refactor to somewhere - with Trigger by (implement) broadcast receiver on Any notification received - 24/02/2019 - Code by Prateek Rokadiya
+//        if (appNamesUniqueList != null){
+//            int i=0;
+//            for (String appName :appNamesUniqueList){
+//                if (i == 0){
+//                    appList.clear();
+//                }
+//                listElements  = new ListElement("Time: "+i, "Today: "+i, appName + " : "+i, 0 + "");
+//                appList.add(listElements);
+//                i++;
+//            }
+//        }
+//        applistadapter.notifyDataSetInvalidated();
+//        applistadapter.notifyDataSetChanged();
+    }
 }

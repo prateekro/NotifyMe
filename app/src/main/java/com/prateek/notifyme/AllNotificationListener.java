@@ -11,10 +11,14 @@ import android.service.notification.StatusBarNotification;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.prateek.notifyme.beans.ApplicationBean;
+import com.prateek.notifyme.beans.NotificationBean;
 import com.prateek.notifyme.commons.utils;
 import com.prateek.notifyme.elements.ListElement;
+import com.prateek.notifyme.service.NotificationService;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -68,6 +72,11 @@ public class AllNotificationListener extends NotificationListenerService {
         super.onNotificationPosted(sbn);
 
         appName = utils.getApplicationName(sbn.getPackageName(), getApplicationContext());
+        NotificationBean notificationBean = new NotificationBean(utils.convertTime(sbn.getPostTime()), appName.toString(), sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TEXT).toString(), sbn.getPackageName().toString());
+        ApplicationBean applicationBean = new ApplicationBean(sbn.getPackageName().toString(), appName, true );
+        NotificationService notificationService = new NotificationService(getApplicationContext());
+        notificationService.saveNotification(notificationBean,applicationBean);
+
         Log.d(TAG, "onNotificationPosted: AppName: "+ appName);
         appNamesUniqueList.add(appName);
 
@@ -84,6 +93,7 @@ public class AllNotificationListener extends NotificationListenerService {
 //            // cancelNotification("0|com.whatsapp|1|null|10117"); key
 //
 //        }
+
 
     }
 

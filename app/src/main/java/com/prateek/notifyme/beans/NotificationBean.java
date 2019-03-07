@@ -2,7 +2,7 @@ package com.prateek.notifyme.beans;
 
 import java.util.Date;
 
-public class Notification {
+public class NotificationBean {
     private String id;
     private Date timestamp;
     private String appName;
@@ -18,10 +18,7 @@ public class Notification {
         this.appId = appId;
     }
 
-
-
-    public Notification(String id, Date timestamp, String appName, String text, String appId) {
-        this.id = id;
+    public NotificationBean(Date timestamp, String appName, String text, String appId) {
         this.timestamp = timestamp;
         this.appName = appName;
         this.text = text;
