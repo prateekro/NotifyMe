@@ -2,6 +2,7 @@ package com.prateek.notifyme.commons;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -44,6 +45,13 @@ public class utils {
     }
 
     public static String getApplicationName(String package_name, Context context){
+//        sendBroadcast(new Intent(this, MyReceiver.class).setAction("MyAction"));
+//        TODO - Broadcast Receiver
+
+//        .TODO - Broadcast Receiver
+
+
+
         PackageManager pm = context.getPackageManager();
         ApplicationInfo ai;
         try {

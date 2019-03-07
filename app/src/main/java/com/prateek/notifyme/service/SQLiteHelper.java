@@ -117,8 +117,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     // checks whether the notfication's application is present in the APPLICATION_TABLE_NAME (DashBoard)
     public boolean isAppPresent(String appId){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select * from "+ APPLICATION_TABLE_NAME+" where UPPER("+APPLICATION_COL1+") = ?"
-                ,new String[]{appId.toUpperCase()});
+        Cursor res = db.rawQuery("select * from "+ APPLICATION_TABLE_NAME+" where " + APPLICATION_COL1 +" = ?"
+                ,new String[]{appId});
         if(res.getCount()>0){
             return true;
         }
@@ -126,11 +126,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     }
     // updates the APPLICATION_TABLE_NAME with incremented unread counter
-    public boolean updateAppTable(String appId,int unreadNotificationsCount){
+    public boolean updateAppTable(String appId, int unreadNotificationsCount){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(APPLICATION_COL4, unreadNotificationsCount+1);
-        long result = db.update(APPLICATION_TABLE_NAME, values, "UPPER("+APPLICATION_COL1+") = ?", new String[]{appId});
+        long result = db.update(APPLICATION_TABLE_NAME, values, APPLICATION_COL1 +" = ?", new String[]{appId});
         if (result <=0)
             return false;
         else
@@ -141,8 +141,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     public Cursor getUnreadNotificationCount(String appId){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select "+APPLICATION_COL4 +" from " + APPLICATION_TABLE_NAME+" where UPPER("
-                +APPLICATION_COL1+") = ?" ,new String[]{appId.toUpperCase()});
+        Cursor res = db.rawQuery("select "+APPLICATION_COL4 +" from " + APPLICATION_TABLE_NAME+" where "
+                +APPLICATION_COL1+" = ?" ,new String[]{appId});
 
         return res;
     }

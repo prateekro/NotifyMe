@@ -47,9 +47,9 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
 
     private Intent notificationServiceIntent;
-    private ArrayList <ListElement> appList;
+    public ArrayList <ListElement> appList;
     private ListElement listElements;
-    private AppListElementAdapter applistadapter;
+    AppListElementAdapter applistadapter;
     private ListView lv_app;
     public static MySharedPreference mySharedPreference;
 //    public static SQLiteHelper mDatabaseHelper;
@@ -136,30 +136,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btn_notify:
                     // do notify
-                    Log.d(utils.TAG, "%%%%%%%: ");
-                    NotificationService notificationService = new NotificationService(getApplicationContext());
-                    HashMap<String, Integer> myAllNotifications = notificationService.getAllNotifications();
-                    Set keys = myAllNotifications.keySet();
-                    Log.d(utils.TAG, "%%%%%%%: KEYS "+ keys);
-                    for(Object k: keys) {
-                        Log.d(utils.TAG, "onClick: App: "+k.toString()+" Unread: "+myAllNotifications.get(k));
-                    }
-
-                    //ToDO - Refactor to somewhere - with Trigger by (implement) broadcast receiver on Any notification received - 24/02/2019 - Code by Prateek Rokadiya
-                    if (appNamesUniqueList != null){
-                        int i=0;
-                        for (String appName :appNamesUniqueList){
-                            if (i == 0){
-                                appList.clear();
-                            }
-                            listElements  = new ListElement("Time: "+i, "Today: "+i, appName + " : "+i, 0 + "");
-                            appList.add(listElements);
-                            i++;
-                        }
-                    }
-                    applistadapter.notifyDataSetInvalidated();
-                    applistadapter.notifyDataSetChanged();
                     //ToDO - Refactor to somewhere - code
+                    updateListOfNotifications();
 
                     //showNotification();
                     break;
@@ -168,4 +146,40 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+    public void updateListOfNotifications(){
+
+        Log.d(utils.TAG, "%%%%%%%: ");
+        NotificationService notificationService = new NotificationService(getApplicationContext());
+        HashMap<String, Integer> myAllNotifications = notificationService.getAllNotifications();
+        Set appNames = myAllNotifications.keySet();
+        Log.d(utils.TAG, "%%%%%%%: KEYS "+ appNames);
+        int i=0;
+        for(Object appName: appNames) {
+            if (i == 0){
+                appList.clear();
+            }
+            Log.d(utils.TAG, "onClick: App: "+ appName.toString()+" Unread: "+myAllNotifications.get(appName));
+            listElements  = new ListElement(" ", " ", appName.toString(), myAllNotifications.get(appName).toString());
+            appList.add(listElements);
+            i++;
+        }
+        applistadapter.notifyDataSetInvalidated();
+        applistadapter.notifyDataSetChanged();
+
+        //ToDO - Refactor to somewhere - with Trigger by (implement) broadcast receiver on Any notification received - 24/02/2019 - Code by Prateek Rokadiya
+//        if (appNamesUniqueList != null){
+//            int i=0;
+//            for (String appName :appNamesUniqueList){
+//                if (i == 0){
+//                    appList.clear();
+//                }
+//                listElements  = new ListElement("Time: "+i, "Today: "+i, appName + " : "+i, 0 + "");
+//                appList.add(listElements);
+//                i++;
+//            }
+//        }
+//        applistadapter.notifyDataSetInvalidated();
+//        applistadapter.notifyDataSetChanged();
+    }
 }
