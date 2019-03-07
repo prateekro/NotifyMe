@@ -2,26 +2,26 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.prateek.notifyme">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/icon"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light">
-        <activity android:name=".SettingPageActivity">
+        android:theme="@style/AppTheme">
+        <activity android:name=".SignIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".SubSettingPageActivity"/>
-
         <activity android:name=".NotificationListing" />
-        <activity android:name=".SignIn">
-
-        </activity>
         <activity android:name=".MainActivity" />
+        <activity android:name=".NotificationListing"></activity>
+        <activity android:name=".SettingPageActivity" />
 
         <service
             android:name=".AllNotificationListener"
@@ -32,6 +32,9 @@
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
         </service>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

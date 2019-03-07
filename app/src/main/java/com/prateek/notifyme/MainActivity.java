@@ -1,47 +1,31 @@
 package com.prateek.notifyme;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.database.sqlite.SQLiteOpenHelper;
-import android.os.Build;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ListView;
-import android.widget.Toast;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.prateek.notifyme.R;
-import android.widget.Toast;
-import com.prateek.notifyme.adapter.AppListElementAdapter;
-import com.prateek.notifyme.commons.MySharedPreference;
-import com.google.firebase.auth.FirebaseAuth;
-import com.prateek.notifyme.R;
 import com.prateek.notifyme.adapter.AppListElementAdapter;
 import com.prateek.notifyme.commons.MySharedPreference;
 import com.prateek.notifyme.commons.utils;
 import com.prateek.notifyme.elements.ListElement;
 import com.prateek.notifyme.service.NotificationService;
-import com.prateek.notifyme.service.SQLiteHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
-import static com.prateek.notifyme.AllNotificationListener.appNamesUniqueList;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -52,7 +36,10 @@ public class MainActivity extends AppCompatActivity {
     AppListElementAdapter applistadapter;
     private ListView lv_app;
     public static MySharedPreference mySharedPreference;
-//    public static SQLiteHelper mDatabaseHelper;
+    //    public static SQLiteHelper mDatabaseHelper;
+    FloatingActionButton fabMenu;
+    Timer timerHandler;
+    TimerTask timedNotificationUpdate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +52,16 @@ public class MainActivity extends AppCompatActivity {
 
         //Start Service
         if (!utils.isMyServiceRunning(AllNotificationListener.class, getApplicationContext())) {
-            Log.d(utils.TAG, "onCreate: Service Started");
+            Log.d(utils.TAG, "##### onCreate: Service initiated");
+            // Call for permission
+            startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+            overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+
+            Toast.makeText(this, "Allow NotifyMe to run in background by enabling toggle in Notification Access", Toast.LENGTH_LONG).show();
+
             utils.callServiceStart(notificationServiceIntent, getApplicationContext());
         }else {
-            Log.d(utils.TAG, "onCreate: Service Running already");
+            Log.d(utils.TAG, "##### onCreate: Service Running already");
         }
         //.Start Service
 
@@ -80,18 +73,40 @@ public class MainActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
+//        timerHandler = new Timer();
+
+//        timerHandler.schedule(timedNotificationUpdate, 0, 3000);
+
     }
+
+    private void TimerMethod() {
+        //This method is called directly by the timer and runs in the same thread as the timer.
+        this.runOnUiThread(Timer_Tick);
+        //We call the method that will work with the UI through the runOnUiThread method.
+    }
+
+    private Runnable Timer_Tick = new Runnable() {
+        public void run() {
+            //This method runs in the same thread as the UI.
+            updateListOfNotifications();
+            //Do something to the UI thread here
+        }
+    };
 
     @Override
     protected void onStart() {
         super.onStart();
 
-        Button permitButton = (Button) findViewById(R.id.click_permit);
-        Button notifyButton = (Button) findViewById(R.id.btn_notify);
+//        Button permitButton = (Button) findViewById(R.id.click_permit);
+//        Button notifyButton = (Button) findViewById(R.id.btn_notify);
+
+        fabMenu = (FloatingActionButton) findViewById(R.id.fabMenu);
 
         applistadapter = new AppListElementAdapter(this, R.layout.list_element, appList);
         lv_app.setAdapter(applistadapter);
 
+        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.rv_layout_animation);
+        lv_app.setLayoutAnimation(controller);
         lv_app.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -104,21 +119,48 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        fabMenu.setOnClickListener(tapFetcher);
 
 
-        permitButton.setOnClickListener(tapFetcher);
-        notifyButton.setOnClickListener(tapFetcher);
 
-        Button logOut = (Button) findViewById(R.id.log_out);
-        logOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-                mAuth.signOut();
-                Intent intent = new Intent(getApplicationContext(), SignIn.class);
-                startActivity(intent);
+//        permitButton.setOnClickListener(tapFetcher);
+//        notifyButton.setOnClickListener(tapFetcher);
+
+//        Button logOut = (Button) findViewById(R.id.log_out);
+//        logOut.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(MainActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+        //TODO  - DO IT ON SETTINGS LOG OUT-  mAuth.signOut();
+
+//                mAuth.signOut();
+//                Intent intent = new Intent(getApplicationContext(), SignIn.class);
+//                startActivity(intent);
+//                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+//
+//            }
+//        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        timedNotificationUpdate.cancel();
+        timerHandler.cancel();
+        timerHandler.purge();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        timerHandler = new Timer();
+        timedNotificationUpdate = new TimerTask() {
+            public void run() {
+                TimerMethod();
+                // here goes my code
             }
-        });
+        };
+        timerHandler.schedule(timedNotificationUpdate, 0, 3000);
     }
 
     private View.OnClickListener tapFetcher = new View.OnClickListener() {
@@ -128,18 +170,24 @@ public class MainActivity extends AppCompatActivity {
 
             // So we will make
             switch (v.getId() /*to get clicked view id**/) {
-                case R.id.click_permit:
+//                case R.id.click_permit:
+//
+//                    // Call for permission
+//                    startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
+//                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+//
+//                    break;
+//                case R.id.btn_notify:
+//                    // do notify
+//                    //ToDO - Refactor to somewhere - code
+////                    updateListOfNotifications();
+//
+//                    //showNotification();
+//                    break;
+                case R.id.fabMenu:
+                    startActivity(new Intent(MainActivity.this, SettingPageActivity.class));
+                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 
-                    // Call for permission
-                    startActivity(new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"));
-
-                    break;
-                case R.id.btn_notify:
-                    // do notify
-                    //ToDO - Refactor to somewhere - code
-                    updateListOfNotifications();
-
-                    //showNotification();
                     break;
                 default:
                     break;
@@ -149,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void updateListOfNotifications(){
 
-        Log.d(utils.TAG, "%%%%%%%: ");
+        Log.d(utils.TAG, "%%%%%%%: UPDATE CALLED");
         NotificationService notificationService = new NotificationService(getApplicationContext());
         HashMap<String, Integer> myAllNotifications = notificationService.getAllNotifications();
         Set appNames = myAllNotifications.keySet();
@@ -164,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
             appList.add(listElements);
             i++;
         }
+
         applistadapter.notifyDataSetInvalidated();
         applistadapter.notifyDataSetChanged();
 
@@ -181,5 +230,12 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //        applistadapter.notifyDataSetInvalidated();
 //        applistadapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onBackPressed() {
+//        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.slide_to_right, R.anim.slide_from_left);
     }
 }

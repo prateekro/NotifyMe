@@ -45,4 +45,11 @@ public class NotificationListing extends AppCompatActivity {
         mAppListElementAdapter = new AppListElementAdapter(this, R.layout.list_element, notificationList);
         lv_listing.setAdapter(mAppListElementAdapter);
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+        overridePendingTransition(R.anim.slide_to_right, R.anim.slide_from_left);
+    }
 }

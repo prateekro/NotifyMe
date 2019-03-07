@@ -38,6 +38,8 @@ public class AllNotificationListener extends NotificationListenerService {
 
     private String appName;
 
+    private String extra = " ";
+
     public AllNotificationListener() {
 
     }
@@ -72,7 +74,17 @@ public class AllNotificationListener extends NotificationListenerService {
         super.onNotificationPosted(sbn);
 
         appName = utils.getApplicationName(sbn.getPackageName(), getApplicationContext());
-        NotificationBean notificationBean = new NotificationBean(utils.convertTime(sbn.getPostTime()), appName.toString(), sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TEXT).toString(), sbn.getPackageName().toString());
+        Log.d(TAG, "onNotificationPosted: sbn.postedTime"+sbn.getPostTime());
+        Log.d(TAG, "onNotificationPosted: appName"+appName);
+        if (sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TEXT) == null){
+            extra = " ";
+        } else{
+            extra = sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TEXT).toString();
+        }
+        Log.d(TAG, "onNotificationPosted: sbn EXTRA TEXT"+extra);
+        Log.d(TAG, "onNotificationPosted: sbn.getPackageName()"+sbn.getPackageName());
+
+        NotificationBean notificationBean = new NotificationBean(utils.convertTime(sbn.getPostTime()), appName.toString(), extra, sbn.getPackageName().toString());
         ApplicationBean applicationBean = new ApplicationBean(sbn.getPackageName().toString(), appName, true );
         NotificationService notificationService = new NotificationService(getApplicationContext());
         notificationService.saveNotification(notificationBean,applicationBean);
