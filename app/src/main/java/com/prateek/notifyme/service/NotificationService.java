@@ -3,6 +3,7 @@ package com.prateek.notifyme.service;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.prateek.notifyme.beans.Application;
 import com.prateek.notifyme.beans.Notification;
 import com.prateek.notifyme.beans.User;
 
@@ -15,12 +16,26 @@ import java.util.Map;
 public class NotificationService {
     private SQLiteHelper mDatabaseHelper;
     //on receiving every notification, save target app, notification text, timestamp, priority, unreadCounter
-    public void saveNotification(Notification notification){
+    public void saveNotification(Notification notification, Application application){
+
+        //fetch the details of the Notification Object
         String id = notification.getId();
         String appName = notification.getAppName();
         String time = notification.getTimestamp().toString();
         String text = notification.getText();
         String appId = notification.getAppId();
+
+        //fetch the details of the Application Object
+        String priority = application.getPriority();
+        String enabled = Boolean.toString(application.isEnabled());
+        String category = application.getCategory();
+        String totalNotifications = Integer.toString(application.getTotalNotifications());
+        String unreadNotifications = Integer.toString(application.getUnreadNotifications());
+        String lastNotificationTimestamp = application.getLastNotificationTimestamp();
+        String readTimestamp  = application.getReadTimestamp();
+        String userId = application.getUserId();
+
+
         //boolean variable for checking the success of events
         boolean isUpdated, isAppInserted, isNotificationSuccess ;
         isNotificationSuccess = mDatabaseHelper.saveNotificationDB(id, appName, time, text, appId);
@@ -29,8 +44,8 @@ public class NotificationService {
             isUpdated = mDatabaseHelper.updateAppTable(appId,Integer.parseInt(cur.getString(0)));
         }
         else{
-            isAppInserted = mDatabaseHelper.insertApp(appId, appName, "High", "",
-                    "","","","","","101" );
+            isAppInserted = mDatabaseHelper.insertApp(appId, appName, priority, enabled,
+                    category,totalNotifications,unreadNotifications,lastNotificationTimestamp,readTimestamp,userId );
         }
 
 
