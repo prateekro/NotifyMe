@@ -17,11 +17,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SubSettingPageActivity"/>
         <activity android:name=".NotificationListing" />
         <activity android:name=".MainActivity" />
-        <activity android:name=".NotificationListing"></activity>
         <activity android:name=".SettingPageActivity" />
+        <activity android:name=".SubSettingPageActivity"/>
 
         <service
             android:name=".AllNotificationListener"

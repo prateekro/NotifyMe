@@ -133,10 +133,6 @@ public class MainActivity extends AppCompatActivity {
 //                Toast.makeText(MainActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
         //TODO  - DO IT ON SETTINGS LOG OUT-  mAuth.signOut();
 
-//                mAuth.signOut();
-//                Intent intent = new Intent(getApplicationContext(), SignIn.class);
-//                startActivity(intent);
-//                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 //
 //            }
 //        });

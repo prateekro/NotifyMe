@@ -11,11 +11,13 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class SettingPageActivity extends AppCompatActivity {
-
+    private FirebaseAuth mAuth;
     List<String> dataForSetting = new ArrayList<>();
 
     @Override
@@ -23,6 +25,7 @@ public class SettingPageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setting_page);
         init();
+        mAuth = FirebaseAuth.getInstance();
         ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.activity_listview, dataForSetting);
         ListView listView = findViewById(R.id.settingDataView);
         listView.setAdapter(adapter);
@@ -61,8 +64,13 @@ public class SettingPageActivity extends AppCompatActivity {
             case "Version":
                 Toast.makeText(getApplicationContext(), "Version 0.0.1 SNAPSHOT ", Toast.LENGTH_SHORT).show();
                 break;
-            case "Sign in / Sign out":
+            case "Sign out":
                 Toast.makeText(getApplicationContext(), "Signed out !! ", Toast.LENGTH_SHORT).show();
+                mAuth.signOut();
+                Intent intent = new Intent(getApplicationContext(), SignIn.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+
                 break;
         }
     }
@@ -81,7 +89,7 @@ public class SettingPageActivity extends AppCompatActivity {
         dataForSetting.add("App Configure");
         dataForSetting.add("Rate my app");
         dataForSetting.add("Share");
-        dataForSetting.add("Sign in / Sign out");
+        dataForSetting.add("Sign out");
         dataForSetting.add("Version");
     }
 }
