@@ -27,9 +27,16 @@ public class NotificationService {
 //    SQLiteHelper mDatabaseHelper = MainActivity.mDatabaseHelper;
     //on receiving every notification, save target app, notification text, timestamp, priority, unreadCounter
     public void saveNotification(NotificationBean notification, ApplicationBean application){
-
+        Cursor curEnabled = mDatabaseHelper.getEnabledDB(application.getAppName());
+        while(curEnabled.moveToNext()){
+            if(curEnabled.getString(0).equalsIgnoreCase("false")){
+                return;
+            }
+        }
+        //if(!application.isEnabled()) return;
         //fetch the details of the NotificationBean Object
 //        String id = notification.getId();
+
         String appName = notification.getAppName();
         Date time = notification.getTimestamp();
         String text = notification.getText();
@@ -114,18 +121,33 @@ public class NotificationService {
 
     }
 
-    //delete all notifications of a particular app
-    public void deleteNotification(String appName){
-
+    //delete a particular notification
+    public void deleteNotification(String id){
+        boolean isDeleted = mDatabaseHelper.deleteNotificationDB(id);
     }
 
-    //delete all notifications
-    public void clearAllNotifications(){
-
+    //delete all notifications of a particular app
+    public void clearAllNotifications(String appId){
+        boolean isCleared = mDatabaseHelper.clearAllNotificationsDB(appId);
     }
 
     //delete a particular notification
-    public void deleteNotification(NotificationBean notification){
+//    public void deleteNotification(NotificationBean notification){
+//
+//    }
 
+    public void toggleApplication(String appName){
+        Cursor cur = mDatabaseHelper.getEnabledDB(appName);
+        while(cur.moveToNext()){
+            String isEnabled = cur.getString(0);
+            if(isEnabled.equalsIgnoreCase("true")){
+                isEnabled="false";
+            }
+            else{
+                isEnabled="true";
+            }
+            boolean success = mDatabaseHelper.toggleUpdateApplicationDB(appName,isEnabled);
+        }
     }
+
 }
