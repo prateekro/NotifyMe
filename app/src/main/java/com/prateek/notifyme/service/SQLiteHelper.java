@@ -171,5 +171,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             return true;
     }
 
+    public void resetCounterDB(String appId){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(APPLICATION_COL7, 0);
+        db.update(APPLICATION_TABLE_NAME, values, "UPPER("+APPLICATION_COL1+") = ?", new String[]{appId});
+
+    }
+
+    //public void clearAll
+
 }
     

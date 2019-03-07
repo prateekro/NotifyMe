@@ -81,17 +81,18 @@ public class NotificationService {
     }
 
     //on app tap from dashboard, the unread counter should reset
-    public void resetCounter(String appName){
+    public void resetCounter(String appId){
+        mDatabaseHelper.resetCounterDB(appId);
 
     }
 
     //delete all notifications of a particular app
-    public void deleteNotification(String appName){
+    public void deleteNotification(String appId){
 
     }
 
     //delete all notifications
-    public void clearAllNotifications(){
+    public void clearAllNotifications(String appId){
 
     }
 
@@ -99,4 +100,5 @@ public class NotificationService {
     public void deleteNotification(Notification notification){
 
     }
+
 }
