@@ -61,6 +61,9 @@ public class SettingPageActivity extends AppCompatActivity {
             case "Version":
                 Toast.makeText(getApplicationContext(), "Version 0.0.1 SNAPSHOT ", Toast.LENGTH_SHORT).show();
                 break;
+            case "Sign in / Sign out":
+                Toast.makeText(getApplicationContext(), "Signed out !! ", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 
@@ -78,6 +81,7 @@ public class SettingPageActivity extends AppCompatActivity {
         dataForSetting.add("App Configure");
         dataForSetting.add("Rate my app");
         dataForSetting.add("Share");
+        dataForSetting.add("Sign in / Sign out");
         dataForSetting.add("Version");
     }
 }
