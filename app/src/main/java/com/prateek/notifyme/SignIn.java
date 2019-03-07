@@ -72,7 +72,8 @@ public class SignIn extends AppCompatActivity {
                             et_confirm_pass.setVisibility(View.INVISIBLE);
                         }else{
                             //TODO: Set null checks and messages
-                            signIn(et_username.getText().toString(), et_password.getText().toString());
+                            if(!et_username.getText().toString().isEmpty() && !et_password.getText().toString().isEmpty())
+                                signIn(et_username.getText().toString(), et_password.getText().toString());
 //                            startActivity(new Intent(SignIn.this, MainActivity.class));
                         }
                         break;
@@ -90,6 +91,7 @@ public class SignIn extends AppCompatActivity {
                         if (et_confirm_pass.getVisibility() == View.VISIBLE){
                             //Call service to signUp and (default login?) and take to MainActivity
                             //TODO: Set null checks and messages
+                            if(!et_username.getText().toString().isEmpty() && !et_password.getText().toString().isEmpty())
                             createAccount(et_username.getText().toString(), et_password.getText().toString());
 //                            startActivity(new Intent(SignIn.this, MainActivity.class));
                         }else{

@@ -1,6 +1,6 @@
 package com.prateek.notifyme.beans;
 
-public class Application {
+public class ApplicationBean {
 
     private String appId;
     private String appName;
@@ -13,7 +13,7 @@ public class Application {
     private String readTimestamp;
     private String userId;
 
-    public Application(String appId, String appName, String priority, boolean enabled, String category, int totalNotifications, int unreadNotifications, String lastNotificationTimestamp, String readTimestamp, String userId) {
+    public ApplicationBean(String appId, String appName, String priority, boolean enabled, String category, int totalNotifications, int unreadNotifications, String lastNotificationTimestamp, String readTimestamp, String userId) {
         this.appId = appId;
         this.appName = appName;
         this.priority = priority;

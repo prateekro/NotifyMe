@@ -2,14 +2,12 @@ package com.prateek.notifyme.service;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
-import com.prateek.notifyme.beans.Notification;
+import com.prateek.notifyme.commons.utils;
 
 import java.util.Date;
 
@@ -49,7 +47,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTable_notification = "CREATE TABLE " + NOTIFICATION_TABLE_NAME + " (" +
-                NOTIFICATION_COL1+ "TEXT PRIMARY KEY, "+
+                NOTIFICATION_COL1+ "INTEGER AUTO_INCREMENT PRIMARY KEY, "+
                 NOTIFICATION_COL2+ "DATETIME NOT NULL, "+
                 NOTIFICATION_COL3+ "TEXT NOT NULL, "+
                 NOTIFICATION_COL4+ "TEXT NOT NULL, "+
@@ -102,12 +100,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     // saves the notification in NOTIFICATION_TABLE_NAME
-    public boolean saveNotificationDB(String id, String appName, String time, String text, String appId){
+    public boolean saveNotificationDB(String appName, Date time, String text, String appId){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(NOTIFICATION_COL1, id);
         values.put(NOTIFICATION_COL2, appName);
-        values.put(NOTIFICATION_COL3, time);
+        values.put(NOTIFICATION_COL3, utils.timeToString(time));
         values.put(NOTIFICATION_COL4, text);
         values.put(NOTIFICATION_COL5, appId);
         long result = db.insert(NOTIFICATION_TABLE_NAME, null, values);

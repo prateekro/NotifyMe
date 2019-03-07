@@ -1,31 +1,26 @@
 package com.prateek.notifyme.service;
 
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
-import com.prateek.notifyme.beans.Application;
-import com.prateek.notifyme.beans.Notification;
-import com.prateek.notifyme.beans.User;
+import com.prateek.notifyme.beans.ApplicationBean;
+import com.prateek.notifyme.beans.NotificationBean;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class NotificationService {
     private SQLiteHelper mDatabaseHelper;
     //on receiving every notification, save target app, notification text, timestamp, priority, unreadCounter
-    public void saveNotification(Notification notification, Application application){
+    public void saveNotification(NotificationBean notification, ApplicationBean application){
 
-        //fetch the details of the Notification Object
-        String id = notification.getId();
+        //fetch the details of the NotificationBean Object
+//        String id = notification.getId();
         String appName = notification.getAppName();
-        String time = notification.getTimestamp().toString();
+        Date time = notification.getTimestamp();
         String text = notification.getText();
         String appId = notification.getAppId();
 
-        //fetch the details of the Application Object
+        //fetch the details of the ApplicationBean Object
         String priority = application.getPriority();
         String enabled = Boolean.toString(application.isEnabled());
         String category = application.getCategory();
@@ -38,7 +33,7 @@ public class NotificationService {
 
         //boolean variable for checking the success of events
         boolean isUpdated, isAppInserted, isNotificationSuccess ;
-        isNotificationSuccess = mDatabaseHelper.saveNotificationDB(id, appName, time, text, appId);
+        isNotificationSuccess = mDatabaseHelper.saveNotificationDB(appName, time, text, appId);
         if(mDatabaseHelper.isAppPresent(appId)){
             Cursor cur = mDatabaseHelper.getUnreadNotificationCount(appId);
             isUpdated = mDatabaseHelper.updateAppTable(appId,Integer.parseInt(cur.getString(0)));
@@ -50,7 +45,7 @@ public class NotificationService {
 
 
         //TODO: add "if not on the app's notification listing page", only then update unread counter
-        //check whether app name entry already exists in Application DB, if not save it, if yes update and "if not on the app's notification listing page", only then update unread counter
+        //check whether app name entry already exists in ApplicationBean DB, if not save it, if yes update and "if not on the app's notification listing page", only then update unread counter
 
     }
 
@@ -96,7 +91,7 @@ public class NotificationService {
     }
 
     //delete a particular notification
-    public void deleteNotification(Notification notification){
+    public void deleteNotification(NotificationBean notification){
 
     }
 }

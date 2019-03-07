@@ -12,7 +12,10 @@ import android.util.Log;
 import com.prateek.notifyme.R;
 import com.prateek.notifyme.elements.ListElement;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
@@ -78,6 +81,16 @@ public class utils {
     }
 
 
+    public static Date convertTime(long time){
+        Date date = new Date(time);
+        Format format = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+        return date;
+    }
+
+    public static String timeToString(Date time){ ;
+        Format format = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+        return format.format(time);
+    }
 }
 
 
