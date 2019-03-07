@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -34,6 +35,7 @@ import com.prateek.notifyme.commons.MySharedPreference;
 import com.prateek.notifyme.commons.utils;
 import com.prateek.notifyme.elements.ListElement;
 import com.prateek.notifyme.service.NotificationService;
+import com.prateek.notifyme.service.SQLiteHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     private AppListElementAdapter applistadapter;
     private ListView lv_app;
     public static MySharedPreference mySharedPreference;
+//    public static SQLiteHelper mDatabaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         notificationServiceIntent = new Intent(getApplicationContext(), AllNotificationListener.class);
+//        mDatabaseHelper = new SQLiteHelper(getApplicationContext(),null,null, 1);
 
         //Start Service
         if (!utils.isMyServiceRunning(AllNotificationListener.class, getApplicationContext())) {
@@ -132,11 +136,13 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btn_notify:
                     // do notify
-                    NotificationService notificationService = new NotificationService();
-                    HashMap<String, Integer> myAllNotifications= notificationService.getAllNotifications();
+                    Log.d(utils.TAG, "%%%%%%%: ");
+                    NotificationService notificationService = new NotificationService(getApplicationContext());
+                    HashMap<String, Integer> myAllNotifications = notificationService.getAllNotifications();
                     Set keys = myAllNotifications.keySet();
+                    Log.d(utils.TAG, "%%%%%%%: KEYS "+ keys);
                     for(Object k: keys) {
-                        System.out.println("App: "+k.toString()+" Unread: "+myAllNotifications.get(k));
+                        Log.d(utils.TAG, "onClick: App: "+k.toString()+" Unread: "+myAllNotifications.get(k));
                     }
 
                     //ToDO - Refactor to somewhere - with Trigger by (implement) broadcast receiver on Any notification received - 24/02/2019 - Code by Prateek Rokadiya

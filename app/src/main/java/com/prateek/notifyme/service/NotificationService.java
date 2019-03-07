@@ -1,15 +1,30 @@
 package com.prateek.notifyme.service;
 
+import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 
+import com.prateek.notifyme.MainActivity;
 import com.prateek.notifyme.beans.ApplicationBean;
 import com.prateek.notifyme.beans.NotificationBean;
 
 import java.util.Date;
 import java.util.HashMap;
 
+import static com.prateek.notifyme.commons.utils.TAG;
+
 public class NotificationService {
-    private SQLiteHelper mDatabaseHelper;
+
+    SQLiteHelper mDatabaseHelper;
+    Context mContext;
+
+    public NotificationService(Context applicationContext) {
+        this.mContext = applicationContext;
+        mDatabaseHelper = new SQLiteHelper(applicationContext);
+    }
+
+    //    SQLiteHelper mDatabaseHelper;
+//    SQLiteHelper mDatabaseHelper = MainActivity.mDatabaseHelper;
     //on receiving every notification, save target app, notification text, timestamp, priority, unreadCounter
     public void saveNotification(NotificationBean notification, ApplicationBean application){
 
@@ -31,16 +46,34 @@ public class NotificationService {
         //String userId = application.getUserId();
 
 
+        Log.d(TAG, "saveNotification: "+appName +  time + text+ appId );
         //boolean variable for checking the success of events
         boolean isUpdated, isAppInserted, isNotificationSuccess ;
         isNotificationSuccess = mDatabaseHelper.saveNotificationDB(appName, time, text, appId);
         if(mDatabaseHelper.isAppPresent(appId)){
             Cursor cur = mDatabaseHelper.getUnreadNotificationCount(appId);
-            isUpdated = mDatabaseHelper.updateAppTable(appId,Integer.parseInt(cur.getString(0)));
+
+            while(cur.moveToNext()){
+
+                isUpdated = mDatabaseHelper.updateAppTable(appId,Integer.parseInt(cur.getString(0)));
+                if (isUpdated ){
+                    Log.d(TAG, "saveNotification: OK #");
+                }else{
+                    Log.d(TAG, "saveNotification: NOPE #");
+
+                }
+            }
         }
         else{
+
             isAppInserted = mDatabaseHelper.insertApp(appId, appName, enabled,
                     "1");
+            if (isAppInserted){
+                Log.d(TAG, "saveNotification:@@ OK #");
+            }else{
+                Log.d(TAG, "saveNotification:@@ NOPE #");
+
+            }
         }
 
 
@@ -59,7 +92,7 @@ public class NotificationService {
         Cursor data = mDatabaseHelper.getAppNotifications(appName);
         while (data.moveToNext()) {
             // get all names and put in list
-            textMap.put(data.getString(1), data.getInt(2));
+            textMap.put(data.getString(0), data.getInt(1));
         }
         return textMap;
     }
@@ -70,7 +103,8 @@ public class NotificationService {
         HashMap<String, Integer> listData = new HashMap<String, Integer>();
         while (data.moveToNext()) {
             // get all names and put in list
-            listData.put(data.getString(1), data.getInt(2));
+            Log.d(TAG, "getAllNotifications: @@"+data.getString(0)+data.getString(1));
+            listData.put(data.getString(0), data.getInt(1));
         }
         return listData;
     }

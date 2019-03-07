@@ -74,7 +74,7 @@ public class AllNotificationListener extends NotificationListenerService {
         appName = utils.getApplicationName(sbn.getPackageName(), getApplicationContext());
         NotificationBean notificationBean = new NotificationBean(utils.convertTime(sbn.getPostTime()), appName.toString(), sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TEXT).toString(), sbn.getPackageName().toString());
         ApplicationBean applicationBean = new ApplicationBean(sbn.getPackageName().toString(), appName, true );
-        NotificationService notificationService = new NotificationService();
+        NotificationService notificationService = new NotificationService(getApplicationContext());
         notificationService.saveNotification(notificationBean,applicationBean);
 
         Log.d(TAG, "onNotificationPosted: AppName: "+ appName);
