@@ -168,5 +168,46 @@ public class SQLiteHelper extends SQLiteOpenHelper {
             return true;
     }
 
+    //Clear all Notifications
+    public boolean clearAllNotificationsDB(String appName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(NOTIFICATION_TABLE_NAME, NOTIFICATION_COL3+" = ?", new String[]{appName});
+        if (result <=0)
+            return false;
+        else
+            return true;
+    }
+
+    public boolean deleteNotificationDB(String id){
+        SQLiteDatabase db = this.getWritableDatabase();
+        long result = db.delete(NOTIFICATION_TABLE_NAME, NOTIFICATION_COL1+" = ?", new String[]{id});
+        if (result <=0)
+            return false;
+        else
+            return true;
+    }
+
+    public Cursor getEnabledDB(String appName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor checkEnabledCursor = db.rawQuery("select "+APPLICATION_COL3 +" from " + APPLICATION_TABLE_NAME+" where "
+                +APPLICATION_COL1+" = ?" ,new String[]{appName});
+
+        return checkEnabledCursor;
+
+    }
+
+    public boolean toggleUpdateApplicationDB(String appName, String toggle){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(APPLICATION_COL3, toggle);
+        long result = db.update(APPLICATION_TABLE_NAME, values, APPLICATION_COL1 +" = ?", new String[]{appName});
+        if (result <=0)
+            return false;
+        else
+            return true;
+
+    }
+
+
 }
     
