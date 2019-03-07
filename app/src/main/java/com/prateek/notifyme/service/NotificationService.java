@@ -21,14 +21,14 @@ public class NotificationService {
         String appId = notification.getAppId();
 
         //fetch the details of the ApplicationBean Object
-        String priority = application.getPriority();
+       // String priority = application.getPriority();
         String enabled = Boolean.toString(application.isEnabled());
-        String category = application.getCategory();
-        String totalNotifications = Integer.toString(application.getTotalNotifications());
+        //String category = application.getCategory();
+        //String totalNotifications = Integer.toString(application.getTotalNotifications());
         String unreadNotifications = Integer.toString(application.getUnreadNotifications());
-        String lastNotificationTimestamp = application.getLastNotificationTimestamp();
-        String readTimestamp  = application.getReadTimestamp();
-        String userId = application.getUserId();
+        //String lastNotificationTimestamp = application.getLastNotificationTimestamp();
+        //String readTimestamp  = application.getReadTimestamp();
+        //String userId = application.getUserId();
 
 
         //boolean variable for checking the success of events
@@ -39,8 +39,8 @@ public class NotificationService {
             isUpdated = mDatabaseHelper.updateAppTable(appId,Integer.parseInt(cur.getString(0)));
         }
         else{
-            isAppInserted = mDatabaseHelper.insertApp(appId, appName, priority, enabled,
-                    category,totalNotifications,unreadNotifications,lastNotificationTimestamp,readTimestamp,userId );
+            isAppInserted = mDatabaseHelper.insertApp(appId, appName, enabled,
+                    "1");
         }
 
 

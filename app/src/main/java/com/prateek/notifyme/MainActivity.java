@@ -33,8 +33,11 @@ import com.prateek.notifyme.adapter.AppListElementAdapter;
 import com.prateek.notifyme.commons.MySharedPreference;
 import com.prateek.notifyme.commons.utils;
 import com.prateek.notifyme.elements.ListElement;
+import com.prateek.notifyme.service.NotificationService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 import static com.prateek.notifyme.AllNotificationListener.appNamesUniqueList;
 
@@ -129,6 +132,12 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.btn_notify:
                     // do notify
+                    NotificationService notificationService = new NotificationService();
+                    HashMap<String, Integer> myAllNotifications= notificationService.getAllNotifications();
+                    Set keys = myAllNotifications.keySet();
+                    for(Object k: keys) {
+                        System.out.println("App: "+k.toString()+" Unread: "+myAllNotifications.get(k));
+                    }
 
                     //ToDO - Refactor to somewhere - with Trigger by (implement) broadcast receiver on Any notification received - 24/02/2019 - Code by Prateek Rokadiya
                     if (appNamesUniqueList != null){

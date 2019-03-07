@@ -15,6 +15,7 @@ import com.prateek.notifyme.beans.ApplicationBean;
 import com.prateek.notifyme.beans.NotificationBean;
 import com.prateek.notifyme.commons.utils;
 import com.prateek.notifyme.elements.ListElement;
+import com.prateek.notifyme.service.NotificationService;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -72,7 +73,10 @@ public class AllNotificationListener extends NotificationListenerService {
 
         appName = utils.getApplicationName(sbn.getPackageName(), getApplicationContext());
         NotificationBean notificationBean = new NotificationBean(utils.convertTime(sbn.getPostTime()), appName.toString(), sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TEXT).toString(), sbn.getPackageName().toString());
-//        ApplicationBean applicationBean = new ApplicationBean(sbn.getPackageName().toString(), appName, R.string.HIGH, true, "", 1, 0, )
+        ApplicationBean applicationBean = new ApplicationBean(sbn.getPackageName().toString(), appName, true );
+        NotificationService notificationService = new NotificationService();
+        notificationService.saveNotification(notificationBean,applicationBean);
+
         Log.d(TAG, "onNotificationPosted: AppName: "+ appName);
         appNamesUniqueList.add(appName);
 

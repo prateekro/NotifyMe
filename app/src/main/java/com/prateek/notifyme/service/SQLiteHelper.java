@@ -31,14 +31,14 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String APPLICATION_TABLE_NAME = "application_table";
     private static final String APPLICATION_COL1 = "appid";
     private static final String APPLICATION_COL2= "appName";
-    private static final String APPLICATION_COL3= "priority";
-    private static final String APPLICATION_COL4= "enabled";
-    private static final String APPLICATION_COL5= "category";
-    private static final String APPLICATION_COL6= "totalNotifications";
-    private static final String APPLICATION_COL7= "unreadNotifications";
-    private static final String APPLICATION_COL8= "lastNotificationTimestamp";
-    private static final String APPLICATION_COL9= "readTimestamp";
-    private static final String APPLICATION_COL10= "userId";
+//    private static final String APPLICATION_COL3= "priority";
+    private static final String APPLICATION_COL3= "enabled";
+//    private static final String APPLICATION_COL5= "category";
+//    private static final String APPLICATION_COL6= "totalNotifications";
+    private static final String APPLICATION_COL4= "unreadNotifications";
+//    private static final String APPLICATION_COL8= "lastNotificationTimestamp";
+//    private static final String APPLICATION_COL9= "readTimestamp";
+//    private static final String APPLICATION_COL10= "userId";
 
     public SQLiteHelper(@Nullable Context context, @Nullable String name, @Nullable SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
@@ -66,14 +66,14 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         String createTable_application ="CREATE TABLE " + APPLICATION_TABLE_NAME+ " (" +
                 APPLICATION_COL1+ "TEXT PRIMARY KEY, "+
                 APPLICATION_COL2+ "TEXT PRIMARY KEY, "+
-                APPLICATION_COL3+ "TEXT PRIMARY KEY, "+
-                APPLICATION_COL4+ "TEXT PRIMARY KEY, "+
-                APPLICATION_COL5+ "TEXT PRIMARY KEY, "+
-                APPLICATION_COL6+ "TEXT PRIMARY KEY, "+
-                APPLICATION_COL7+ "TEXT PRIMARY KEY, "+
-                APPLICATION_COL8+ "DATETIME PRIMARY KEY, "+
-                APPLICATION_COL9+ "DATETIME PRIMARY KEY, "+
-                APPLICATION_COL10+ "TEXT NOT NULL" +"); ";
+                APPLICATION_COL3+ "TEXT PRIMARY KEY"+")";
+//                APPLICATION_COL4+ "TEXT PRIMARY KEY, "+
+//                APPLICATION_COL5+ "TEXT PRIMARY KEY, "+
+//                APPLICATION_COL6+ "TEXT PRIMARY KEY, "+
+//                APPLICATION_COL7+ "TEXT PRIMARY KEY, "+
+//                APPLICATION_COL8+ "DATETIME PRIMARY KEY, "+
+//                APPLICATION_COL9+ "DATETIME PRIMARY KEY, "+
+//                APPLICATION_COL10+ "TEXT NOT NULL" +"); ";
         db.execSQL(createTable_application);
     }
 
@@ -86,7 +86,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     public Cursor getApplicationListingData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT "+ APPLICATION_COL2 +", "+ APPLICATION_COL7 +" FROM "+NOTIFICATION_TABLE_NAME;
+        String query = "SELECT "+ APPLICATION_COL2 +", "+ APPLICATION_COL4 +" FROM "+NOTIFICATION_TABLE_NAME;
         Cursor data = db.rawQuery(query, null);
         return data;
     }
@@ -128,7 +128,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public boolean updateAppTable(String appId,int unreadNotificationsCount){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(APPLICATION_COL7, unreadNotificationsCount+1);
+        values.put(APPLICATION_COL4, unreadNotificationsCount+1);
         long result = db.update(APPLICATION_TABLE_NAME, values, "UPPER("+APPLICATION_COL1+") = ?", new String[]{appId});
         if (result <=0)
             return false;
@@ -140,27 +140,26 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     public Cursor getUnreadNotificationCount(String appId){
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor res = db.rawQuery("select "+APPLICATION_COL7 +" from " + APPLICATION_TABLE_NAME+" where UPPER("
+        Cursor res = db.rawQuery("select "+APPLICATION_COL4 +" from " + APPLICATION_TABLE_NAME+" where UPPER("
                 +APPLICATION_COL1+") = ?" ,new String[]{appId.toUpperCase()});
 
         return res;
     }
 
     // Fetch attributes like priority, category to be inserted into the APPLICATION_TABLE_NAME
-    public boolean insertApp(String appId, String appName, String priority, String enabled, String category,String totalNotifications,
-                             String unreadNotifications, String lastNotificationTimestamp, String readTimestamp, String userId){
+    public boolean insertApp(String appId, String appName, String enabled, String unreadNotifications){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(APPLICATION_COL1, appId);
         values.put(APPLICATION_COL2, appName);
-        values.put(APPLICATION_COL3, priority);
+        //values.put(APPLICATION_COL3, priority);
         values.put(APPLICATION_COL4, enabled);
-        values.put(APPLICATION_COL5, category);
-        values.put(APPLICATION_COL6, totalNotifications);
-        values.put(APPLICATION_COL7, unreadNotifications);
-        values.put(APPLICATION_COL8, lastNotificationTimestamp);
-        values.put(APPLICATION_COL9, readTimestamp);
-        values.put(APPLICATION_COL10, userId);
+//        values.put(APPLICATION_COL5, category);
+//        values.put(APPLICATION_COL6, totalNotifications);
+        values.put(APPLICATION_COL4, unreadNotifications);
+//        values.put(APPLICATION_COL8, lastNotificationTimestamp);
+//        values.put(APPLICATION_COL9, readTimestamp);
+//        values.put(APPLICATION_COL10, userId);
         long result = db.insert(APPLICATION_TABLE_NAME, null, values);
         if (result == -1)
             return false;

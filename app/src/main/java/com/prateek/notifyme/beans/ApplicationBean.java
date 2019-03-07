@@ -4,26 +4,26 @@ public class ApplicationBean {
 
     private String appId;
     private String appName;
-    private String priority;
+//    private String priority;
     private boolean enabled;
-    private String category;
-    private int totalNotifications;
+//    private String category;
+//    private int totalNotifications;
     private int unreadNotifications;
-    private String lastNotificationTimestamp;
-    private String readTimestamp;
-    private String userId;
+//    private String lastNotificationTimestamp;
+//    private String readTimestamp;
+//    private String userId;
 
-    public ApplicationBean(String appId, String appName, String priority, boolean enabled, String category, int totalNotifications, int unreadNotifications, String lastNotificationTimestamp, String readTimestamp, String userId) {
+    public ApplicationBean(String appId, String appName, boolean enabled) {
         this.appId = appId;
         this.appName = appName;
-        this.priority = priority;
+//        this.priority = priority;
         this.enabled = enabled;
-        this.category = category;
-        this.totalNotifications = totalNotifications;
-        this.unreadNotifications = unreadNotifications;
-        this.lastNotificationTimestamp = lastNotificationTimestamp;
-        this.readTimestamp = readTimestamp;
-        this.userId = userId;
+//        this.category = category;
+//        this.totalNotifications = totalNotifications;
+//        this.unreadNotifications = unreadNotifications;
+//        this.lastNotificationTimestamp = lastNotificationTimestamp;
+//        this.readTimestamp = readTimestamp;
+//        this.userId = userId;
     }
 
     public String getAppId() {
@@ -42,14 +42,14 @@ public class ApplicationBean {
         this.appName = appName;
     }
 
-    public String getPriority() {
-        return priority;
-    }
-
-    public void setPriority(String priority) {
-        this.priority = priority;
-    }
-
+//    public String getPriority() {
+//        return priority;
+//    }
+//
+//    public void setPriority(String priority) {
+//        this.priority = priority;
+//    }
+//
     public boolean isEnabled() {
         return enabled;
     }
@@ -58,21 +58,21 @@ public class ApplicationBean {
         this.enabled = enabled;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public int getTotalNotifications() {
-        return totalNotifications;
-    }
-
-    public void setTotalNotifications(int totalNotifications) {
-        this.totalNotifications = totalNotifications;
-    }
+//    public String getCategory() {
+//        return category;
+//    }
+//
+//    public void setCategory(String category) {
+//        this.category = category;
+//    }
+//
+//    public int getTotalNotifications() {
+//        return totalNotifications;
+//    }
+//
+//    public void setTotalNotifications(int totalNotifications) {
+//        this.totalNotifications = totalNotifications;
+//    }
 
     public int getUnreadNotifications() {
         return unreadNotifications;
@@ -82,27 +82,27 @@ public class ApplicationBean {
         this.unreadNotifications = unreadNotifications;
     }
 
-    public String getLastNotificationTimestamp() {
-        return lastNotificationTimestamp;
-    }
-
-    public void setLastNotificationTimestamp(String lastNotificationTimestamp) {
-        this.lastNotificationTimestamp = lastNotificationTimestamp;
-    }
-
-    public String getReadTimestamp() {
-        return readTimestamp;
-    }
-
-    public void setReadTimestamp(String readTimestamp) {
-        this.readTimestamp = readTimestamp;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+//    public String getLastNotificationTimestamp() {
+//        return lastNotificationTimestamp;
+//    }
+//
+//    public void setLastNotificationTimestamp(String lastNotificationTimestamp) {
+//        this.lastNotificationTimestamp = lastNotificationTimestamp;
+//    }
+//
+//    public String getReadTimestamp() {
+//        return readTimestamp;
+//    }
+//
+//    public void setReadTimestamp(String readTimestamp) {
+//        this.readTimestamp = readTimestamp;
+//    }
+//
+//    public String getUserId() {
+//        return userId;
+//    }
+//
+//    public void setUserId(String userId) {
+//        this.userId = userId;
+//    }
 }
