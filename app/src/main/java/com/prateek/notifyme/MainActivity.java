@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -103,6 +105,8 @@ public class MainActivity extends AppCompatActivity {
         applistadapter = new AppListElementAdapter(this, R.layout.list_element, appList);
         lv_app.setAdapter(applistadapter);
 
+        LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.rv_layout_animation);
+        lv_app.setLayoutAnimation(controller);
         lv_app.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -208,6 +212,7 @@ public class MainActivity extends AppCompatActivity {
             appList.add(listElements);
             i++;
         }
+
         applistadapter.notifyDataSetInvalidated();
         applistadapter.notifyDataSetChanged();
 
