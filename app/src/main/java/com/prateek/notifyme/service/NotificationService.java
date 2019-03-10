@@ -4,12 +4,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.prateek.notifyme.ListViewItemDTO;
 import com.prateek.notifyme.MainActivity;
 import com.prateek.notifyme.beans.ApplicationBean;
 import com.prateek.notifyme.beans.NotificationBean;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import static com.prateek.notifyme.commons.utils.TAG;
 
@@ -137,17 +140,35 @@ public class NotificationService {
 //    }
 
     public void toggleApplication(String appName){
+        Log.d(TAG, "first enter toggleApplication: "+appName);
         Cursor cur = mDatabaseHelper.getEnabledDB(appName);
+        Log.d(TAG, "after curr toggleApplication: "+appName);
         while(cur.moveToNext()){
             String isEnabled = cur.getString(0);
+            System.out.print(isEnabled);
+            Log.d(TAG, "toggleApplication: "+isEnabled);
             if(isEnabled.equalsIgnoreCase("true")){
                 isEnabled="false";
             }
             else{
                 isEnabled="true";
             }
+            Log.d(TAG, "EXIT enter toggleApplication: "+isEnabled);
             boolean success = mDatabaseHelper.toggleUpdateApplicationDB(appName,isEnabled);
         }
     }
 
+    public List<ListViewItemDTO> getEnableStatusOfApps() {
+        Cursor cursor = mDatabaseHelper.getEnableStatusForAppsDB();
+        List<ListViewItemDTO> result = new ArrayList<>();
+        while(cursor.moveToNext()) {
+            Log.d(TAG, "getEnableStatusOfApps: "+cursor.getString(1) + cursor.getString(0));
+            result.add(mapToDTO(cursor.getString(0), Boolean.valueOf(cursor.getString(1))));
+        }
+        return result;
+    }
+
+    public ListViewItemDTO mapToDTO(String name, Boolean status) {
+        return new ListViewItemDTO(status, name);
+    }
 }
