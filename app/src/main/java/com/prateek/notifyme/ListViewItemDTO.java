@@ -8,6 +8,11 @@ public class ListViewItemDTO {
 
     private String itemText = "";
 
+    public ListViewItemDTO(boolean checked, String itemText) {
+        this.checked = checked;
+        this.itemText = itemText;
+    }
+
     public boolean isChecked() {
         return checked;
     }
