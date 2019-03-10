@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-import com.prateek.notifyme.MainActivity;
 import com.prateek.notifyme.beans.ApplicationBean;
 import com.prateek.notifyme.beans.NotificationBean;
 
@@ -57,6 +56,11 @@ public class NotificationService {
         //boolean variable for checking the success of events
         boolean isUpdated, isAppInserted, isNotificationSuccess ;
         isNotificationSuccess = mDatabaseHelper.saveNotificationDB(appName, time, text, appId);
+        if (isNotificationSuccess){
+            Log.d(TAG, "saveNotification BOOLEAN: "+isNotificationSuccess);
+        }else {
+            Log.d(TAG, "saveNotification BOOLEAN: "+isNotificationSuccess);
+        }
         if(mDatabaseHelper.isAppPresent(appId)){
             Cursor cur = mDatabaseHelper.getUnreadNotificationCount(appId);
 
@@ -98,6 +102,7 @@ public class NotificationService {
         HashMap<String, Integer> textMap = new HashMap<String, Integer>();
         Cursor data = mDatabaseHelper.getAppNotifications(appName);
         while (data.moveToNext()) {
+            Log.d(TAG, "getAppNotifications CHECK: "+data.getString(0) + data.getInt(1));
             // get all names and put in list
             textMap.put(data.getString(0), data.getInt(1));
         }

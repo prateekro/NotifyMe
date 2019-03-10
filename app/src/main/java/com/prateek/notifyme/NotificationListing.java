@@ -3,20 +3,24 @@ package com.prateek.notifyme;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.prateek.notifyme.adapter.AppListElementAdapter;
+import com.prateek.notifyme.adapter.SingleAppListAdapter;
 import com.prateek.notifyme.commons.utils;
 import com.prateek.notifyme.elements.ListElement;
+import com.prateek.notifyme.service.NotificationService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 public class NotificationListing extends AppCompatActivity {
 
     String pageTitle = "";
     private ArrayList<ListElement> notificationList;
-    private AppListElementAdapter mAppListElementAdapter;
+    private SingleAppListAdapter mAppListElementAdapter;
     private ListView lv_listing;
 
     @Override
@@ -40,9 +44,17 @@ public class NotificationListing extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-
         notificationList = utils.filterList(pageTitle, AllNotificationListener.ListofAllNotification);
-        mAppListElementAdapter = new AppListElementAdapter(this, R.layout.list_element, notificationList);
+
+        NotificationService notificationService = new NotificationService(getApplicationContext());
+        Log.d(utils.TAG, "APPNAME _ FOR KEYS: "+pageTitle);
+        HashMap<String, Integer> appAllNotifications = notificationService.getAppNotifications(pageTitle);
+        Set appText = appAllNotifications.keySet();
+        Log.d(utils.TAG, "%%%%%%%: SINGLE KEYS "+ appText);
+
+
+
+        mAppListElementAdapter = new SingleAppListAdapter(this, R.layout.list_element, notificationList);
         lv_listing.setAdapter(mAppListElementAdapter);
     }
 

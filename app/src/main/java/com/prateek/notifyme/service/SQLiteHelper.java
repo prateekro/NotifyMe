@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.prateek.notifyme.R;
 import com.prateek.notifyme.commons.utils;
@@ -94,8 +94,9 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     public Cursor getAppNotifications(String appName) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String whereVal = "'" + appName + "'";
-        String query = "SELECT "+ NOTIFICATION_COL4 +", "+ NOTIFICATION_COL2 +" FROM "+NOTIFICATION_TABLE_NAME + " WHERE "+ NOTIFICATION_COL3+"="+whereVal;
+//        String whereVal = "'" + appName + "'";
+        String query = "SELECT "+ NOTIFICATION_COL4 +", "+ NOTIFICATION_COL2 +" FROM "+NOTIFICATION_TABLE_NAME + " WHERE "+ NOTIFICATION_COL3 +" = "+"'" + appName+"'";
+
         Cursor data = db.rawQuery(query, null);
         return data;
     }
@@ -104,11 +105,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public boolean saveNotificationDB(String appName, Date time, String text, String appId){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(NOTIFICATION_COL2, appName);
-        values.put(NOTIFICATION_COL3, utils.timeToString(time));
+        values.put(NOTIFICATION_COL2, utils.timeToString(time));
+        values.put(NOTIFICATION_COL3, appName);
         values.put(NOTIFICATION_COL4, text);
         values.put(NOTIFICATION_COL5, appId);
         long result = db.insert(NOTIFICATION_TABLE_NAME, null, values);
+        Log.d(TAG, "saveNotificationDB CHECK: "+result);
         if (result == -1)
             return false;
         else

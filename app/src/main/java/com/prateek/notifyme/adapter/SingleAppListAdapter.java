@@ -6,8 +6,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
@@ -16,10 +14,8 @@ import com.prateek.notifyme.elements.ListElement;
 
 import java.util.ArrayList;
 
-//https://stackoverflow.com/questions/8166497/custom-adapter-for-list-view :: Read : three_horizontal_text_views_layout
+public class SingleAppListAdapter extends ArrayAdapter<ListElement> {
 
-//https://www.journaldev.com/10416/android-listview-with-custom-adapter-example-tutorial
-public class AppListElementAdapter extends ArrayAdapter<ListElement> {
 
     private int layoutResource;
     private ArrayList<ListElement> appList;
@@ -33,15 +29,13 @@ public class AppListElementAdapter extends ArrayAdapter<ListElement> {
         //ImageView info;
     }
 
-    public AppListElementAdapter(@NonNull Context context, int layoutResource, ArrayList<ListElement> applist) {
+    public SingleAppListAdapter(@NonNull Context context, int layoutResource, ArrayList<ListElement> applist) {
         super(context, layoutResource, applist);
         this.layoutResource = layoutResource;
         this.appList = applist;
         this.mContext = context;
     }
 
-// // TODO - (A) - For animate up down animation - Future todo
-//    private int lastPosition = -1; //
 
     @NonNull
     @Override
@@ -49,32 +43,28 @@ public class AppListElementAdapter extends ArrayAdapter<ListElement> {
 
         ListElement listElement = getItem(position);
 
-        ViewHolder viewHolder;
+        SingleAppListAdapter.ViewHolder viewHolder;
 
         View result;
 
         if (convertView == null){
-            viewHolder = new ViewHolder();
+            viewHolder = new SingleAppListAdapter.ViewHolder();
 
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
             convertView = layoutInflater.inflate(layoutResource, parent, false);
 
-            viewHolder.tv_time = (TextView) convertView.findViewById(R.id.tv_time_element);
-            viewHolder.tv_date = (TextView) convertView.findViewById(R.id.tv_date_element);
-            viewHolder.tv_app_name = (TextView) convertView.findViewById(R.id.tv_app_group);
-            viewHolder.tv_counter = (TextView) convertView.findViewById(R.id.tv_counter_notification);
+            viewHolder.tv_time = (TextView) convertView.findViewById(R.id.tv_time_element_single);
+            viewHolder.tv_date = (TextView) convertView.findViewById(R.id.tv_date_element_single);
+            viewHolder.tv_app_name = (TextView) convertView.findViewById(R.id.tv_app_group_single);
+            viewHolder.tv_counter = (TextView) convertView.findViewById(R.id.tv_counter_notification_single);
 
             result = convertView;
+
             convertView.setTag(viewHolder);
         }else{
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = (SingleAppListAdapter.ViewHolder) convertView.getTag();
             result=convertView;
         }
-// // TODO - (A) - For animate up down animation - Future todo
-//        Animation animation = AnimationUtils.loadAnimation(mContext, (position > lastPosition) ?
-//                R.anim.up_from_bottom : R.anim.down_from_top);
-//        result.startAnimation(animation);
-//        lastPosition = position;
 
         viewHolder.tv_app_name.setText(listElement.getAppName());
         viewHolder.tv_date.setText(listElement.getDate());

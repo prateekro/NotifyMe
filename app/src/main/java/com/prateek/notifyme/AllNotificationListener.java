@@ -18,12 +18,9 @@ import com.prateek.notifyme.elements.ListElement;
 import com.prateek.notifyme.service.NotificationService;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
-import static com.prateek.notifyme.MainActivity.mySharedPreference;
 import static com.prateek.notifyme.commons.utils.TAG;
 
 public class AllNotificationListener extends NotificationListenerService {
@@ -39,6 +36,7 @@ public class AllNotificationListener extends NotificationListenerService {
     private String appName;
 
     private String extra = " ";
+    private String extraTitle = " ";
 
     public AllNotificationListener() {
 
@@ -81,6 +79,14 @@ public class AllNotificationListener extends NotificationListenerService {
         } else{
             extra = sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TEXT).toString();
         }
+
+        if (sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TITLE) == null){
+            extraTitle = " ";
+        }else {
+            extraTitle = sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TITLE).toString();
+        }
+
+
         Log.d(TAG, "onNotificationPosted: sbn EXTRA TEXT"+extra);
         Log.d(TAG, "onNotificationPosted: sbn.getPackageName()"+sbn.getPackageName());
 
@@ -92,11 +98,11 @@ public class AllNotificationListener extends NotificationListenerService {
         Log.d(TAG, "onNotificationPosted: AppName: "+ appName);
         appNamesUniqueList.add(appName);
 
-        listElement = new ListElement(String.valueOf(sbn.getPostTime()), String.valueOf(sbn.getPostTime()), appName, sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TEXT).toString());
+        listElement = new ListElement(String.valueOf(sbn.getPostTime()), String.valueOf(sbn.getPostTime()), appName, extra);
         ListofAllNotification.add(listElement);
 
-        Log.d(TAG, "onNotificationPosted TITILE: "+ sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TITLE).toString());
-        Log.d(TAG, "onNotificationPosted TEXT: "+ sbn.getNotification().extras.getCharSequence(Notification.EXTRA_TEXT).toString());
+        Log.d(TAG, "onNotificationPosted TITLE: "+ extraTitle);
+        Log.d(TAG, "onNotificationPosted TEXT: "+ extra);
         Log.d(TAG, "onNotificationPosted DescibeContents: "+ sbn.describeContents());
 
 //        Log.d(TAG, "onNotificationPosted: "+ sbn.getKey());
