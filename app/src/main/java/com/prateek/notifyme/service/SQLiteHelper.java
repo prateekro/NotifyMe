@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 
+import com.prateek.notifyme.Priority;
 import com.prateek.notifyme.R;
 import com.prateek.notifyme.commons.utils;
 
@@ -19,7 +20,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String NOTIFICATION_COL2 = "TIMESTAMP";
     private static final String NOTIFICATION_COL3 = "APPNAME";
     private static final String NOTIFICATION_COL4 = "TXT";
-    private static final String NOTIFICATION_COL5 = "PRIORITY";
+  //  private static final String NOTIFICATION_COL5 = "PRIORITY";
 
     private static final String USER_TABLE_NAME = "user_table";
     private static final String USER_COL1 = "EMAIL";
@@ -37,6 +38,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 //    private static final String APPLICATION_COL5= "category";
 //    private static final String APPLICATION_COL6= "totalNotifications";
     private static final String APPLICATION_COL4= "unreadNotifications";
+    private static final String APPLICATION_COL5= "priority";
 //    private static final String APPLICATION_COL8= "lastNotificationTimestamp";
 //    prZivate static final String APPLICATION_COL9= "readTimestamp";
 //    private static final String APPLICATION_COL10= "userId";
@@ -51,8 +53,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 NOTIFICATION_COL1+ " INTEGER PRIMARY KEY AUTOINCREMENT, "+
                 NOTIFICATION_COL2+ " DATETIME NOT NULL, "+
                 NOTIFICATION_COL3+ " TEXT NOT NULL, "+
-                NOTIFICATION_COL4+ " TEXT NOT NULL, "+
-                NOTIFICATION_COL5+ " TEXT NOT NULL); ";
+                NOTIFICATION_COL4+ " TEXT NOT NULL) ";
+                //NOTIFICATION_COL5+ " TEXT NOT NULL); ";
         db.execSQL(createTable_notification);
 
         String createTable_user = "CREATE TABLE " + USER_TABLE_NAME+ " (" +
@@ -68,8 +70,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 APPLICATION_COL1+ " TEXT PRIMARY KEY, "+
                 APPLICATION_COL2+ " TEXT, "+
                 APPLICATION_COL3+ " TEXT, "+
-                APPLICATION_COL4+ " TEXT )";
-//                APPLICATION_COL5+ "TEXT, "+
+                APPLICATION_COL4+ " TEXT, "+
+                APPLICATION_COL5+ "TEXT) ";
 //                APPLICATION_COL6+ "TEXT, "+
 //                APPLICATION_COL7+ "TEXT, "+
 //                APPLICATION_COL8+ "DATETIME, "+
@@ -104,10 +106,10 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public boolean saveNotificationDB(String appName, Date time, String text, String appId){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(NOTIFICATION_COL2, appName);
-        values.put(NOTIFICATION_COL3, utils.timeToString(time));
+        values.put(NOTIFICATION_COL2, utils.timeToString(time));
+        values.put(NOTIFICATION_COL3, appName);
         values.put(NOTIFICATION_COL4, text);
-        values.put(NOTIFICATION_COL5, appId);
+        //values.put(NOTIFICATION_COL5, appId);
         long result = db.insert(NOTIFICATION_TABLE_NAME, null, values);
         if (result == -1)
             return false;
@@ -148,7 +150,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     // Fetch attributes like priority, category to be inserted into the APPLICATION_TABLE_NAME
-    public boolean insertApp(String appId, String appName, String enabled, String unreadNotifications){
+    public boolean insertApp(String appId, String appName, String enabled, String unreadNotifications, String priority){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(APPLICATION_COL1, appId);
@@ -158,7 +160,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 //        values.put(APPLICATION_COL5, category);
 //        values.put(APPLICATION_COL6, totalNotifications);
         values.put(APPLICATION_COL4, unreadNotifications);
-//        values.put(APPLICATION_COL8, lastNotificationTimestamp);
+        values.put(APPLICATION_COL5, priority);
 //        values.put(APPLICATION_COL9, readTimestamp);
 //        values.put(APPLICATION_COL10, userId);
         long result = db.insert(APPLICATION_TABLE_NAME, null, values);
@@ -191,9 +193,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor checkEnabledCursor = db.rawQuery("select "+APPLICATION_COL3 +" from " + APPLICATION_TABLE_NAME+" where "
                 +APPLICATION_COL2+" = ?" ,new String[]{appName});
-
         return checkEnabledCursor;
-
     }
 
     public boolean toggleUpdateApplicationDB(String appName, String toggle){
@@ -210,6 +210,18 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public Cursor getEnableStatusForAppsDB(){
         SQLiteDatabase db = this.getWritableDatabase();
         return db.rawQuery("select "+APPLICATION_COL2 + ","+APPLICATION_COL3 +" from " + APPLICATION_TABLE_NAME, null);
+    }
+
+    public boolean setAppPriorityDB(String appName, Enum priority){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(APPLICATION_COL3, priority.name());
+        long result = db.update(APPLICATION_TABLE_NAME, values, APPLICATION_COL2 +" = ?", new String[]{appName});
+        if (result <=0)
+            return false;
+        else
+            return true;
+
     }
 }
     

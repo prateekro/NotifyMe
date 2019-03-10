@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.prateek.notifyme.ListViewItemDTO;
 import com.prateek.notifyme.MainActivity;
+import com.prateek.notifyme.Priority;
 import com.prateek.notifyme.beans.ApplicationBean;
 import com.prateek.notifyme.beans.NotificationBean;
 
@@ -76,8 +77,7 @@ public class NotificationService {
         }
         else{
 
-            isAppInserted = mDatabaseHelper.insertApp(appId, appName, enabled,
-                    "1");
+            isAppInserted = mDatabaseHelper.insertApp(appId, appName, enabled,"1", Priority.HIGH.name());
             if (isAppInserted){
                 Log.d(TAG, "saveNotification:@@ OK #");
             }else{
@@ -130,8 +130,8 @@ public class NotificationService {
     }
 
     //delete all notifications of a particular app
-    public void clearAllNotifications(String appId){
-        boolean isCleared = mDatabaseHelper.clearAllNotificationsDB(appId);
+    public void clearAllNotifications(String appName){
+        boolean isCleared = mDatabaseHelper.clearAllNotificationsDB(appName);
     }
 
     //delete a particular notification
@@ -170,5 +170,9 @@ public class NotificationService {
 
     public ListViewItemDTO mapToDTO(String name, Boolean status) {
         return new ListViewItemDTO(status, name);
+    }
+
+    public void setAppPriority(String appName, Enum priority){
+        mDatabaseHelper.setAppPriorityDB(appName,priority);
     }
 }
