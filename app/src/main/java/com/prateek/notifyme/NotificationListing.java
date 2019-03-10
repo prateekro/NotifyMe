@@ -40,10 +40,10 @@ public class NotificationListing extends AppCompatActivity {
 
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("obj1");
+        DatabaseReference myRef = database.getReference("notifications");
 //        myRef.setValue("Hello, World!");
 //        myRef.setValue("Check instance");
-        myRef.child("change").setValue("true");
+        myRef.child("user1").child("txt").setValue("sample text");
 
         // Read from the database
         myRef.addValueEventListener(new ValueEventListener() {
