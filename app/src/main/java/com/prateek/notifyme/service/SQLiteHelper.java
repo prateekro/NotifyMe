@@ -190,7 +190,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public Cursor getEnabledDB(String appName){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor checkEnabledCursor = db.rawQuery("select "+APPLICATION_COL3 +" from " + APPLICATION_TABLE_NAME+" where "
-                +APPLICATION_COL1+" = ?" ,new String[]{appName});
+                +APPLICATION_COL2+" = ?" ,new String[]{appName});
 
         return checkEnabledCursor;
 
@@ -200,14 +200,16 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(APPLICATION_COL3, toggle);
-        long result = db.update(APPLICATION_TABLE_NAME, values, APPLICATION_COL1 +" = ?", new String[]{appName});
+        long result = db.update(APPLICATION_TABLE_NAME, values, APPLICATION_COL2 +" = ?", new String[]{appName});
         if (result <=0)
             return false;
         else
             return true;
-
     }
 
-
+    public Cursor getEnableStatusForAppsDB(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("select "+APPLICATION_COL2 + ","+APPLICATION_COL3 +" from " + APPLICATION_TABLE_NAME, null);
+    }
 }
     
