@@ -10,6 +10,7 @@ import com.prateek.notifyme.beans.NotificationBean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Set;
 
 import static com.prateek.notifyme.commons.utils.TAG;
 
@@ -116,13 +117,19 @@ public class NotificationService {
     }
 
     //retrieve all app listings along with their unread counter for dashboard page
-    public HashMap<String, Integer> getAllNotifications(){
+    public HashMap<String, ArrayList<String>> getAllNotifications(){
         Cursor data = mDatabaseHelper.getApplicationListingData();
-        HashMap<String, Integer> listData = new HashMap<String, Integer>();
+        HashMap<String, ArrayList<String>> listData = new HashMap<String, ArrayList<String>>();
         while (data.moveToNext()) {
             // get all names and put in list
             Log.d(TAG, "getAllNotifications: @@"+data.getString(0)+data.getString(1));
-            listData.put(data.getString(0), data.getInt(1));
+            ArrayList <String> dataX = new ArrayList<String>();
+            String app_nm = String.valueOf(data.getInt(1));
+            String packg = data.getString(2);
+            dataX.add(app_nm);
+            dataX.add(packg);
+
+            listData.put(data.getString(0), dataX); //appname unread package
         }
         return listData;
     }

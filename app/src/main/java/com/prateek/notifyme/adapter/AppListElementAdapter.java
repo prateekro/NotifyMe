@@ -9,12 +9,15 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.prateek.notifyme.R;
 import com.prateek.notifyme.elements.ListElement;
 
 import java.util.ArrayList;
+
+import static com.prateek.notifyme.commons.utils.getAppIcon;
 
 //https://stackoverflow.com/questions/8166497/custom-adapter-for-list-view :: Read : three_horizontal_text_views_layout
 
@@ -26,6 +29,7 @@ public class AppListElementAdapter extends ArrayAdapter<ListElement> {
     private Context mContext;
 
     private static class ViewHolder {
+        ImageView iv_app_icon;
         TextView tv_time;
         TextView tv_date;
         TextView tv_app_name;
@@ -59,6 +63,7 @@ public class AppListElementAdapter extends ArrayAdapter<ListElement> {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
             convertView = layoutInflater.inflate(layoutResource, parent, false);
 
+            viewHolder.iv_app_icon = (ImageView) convertView.findViewById(R.id.iv_app_icon);
             viewHolder.tv_time = (TextView) convertView.findViewById(R.id.tv_time_element);
             viewHolder.tv_date = (TextView) convertView.findViewById(R.id.tv_date_element);
             viewHolder.tv_app_name = (TextView) convertView.findViewById(R.id.tv_app_group);
@@ -76,6 +81,9 @@ public class AppListElementAdapter extends ArrayAdapter<ListElement> {
 //        result.startAnimation(animation);
 //        lastPosition = position;
 
+
+        viewHolder.iv_app_icon.setImageDrawable(getAppIcon(mContext, listElement.getAppID().toString()));
+        //listElement.getAppName());
         viewHolder.tv_app_name.setText(listElement.getAppName());
         viewHolder.tv_date.setText(listElement.getDate());
         viewHolder.tv_time.setText(listElement.getTime());

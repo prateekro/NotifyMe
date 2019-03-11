@@ -98,7 +98,7 @@ public class AllNotificationListener extends NotificationListenerService {
         Log.d(TAG, "onNotificationPosted: AppName: "+ appName);
         appNamesUniqueList.add(appName);
 
-        listElement = new ListElement(String.valueOf(sbn.getPostTime()), String.valueOf(sbn.getPostTime()), appName, extra);
+        listElement = new ListElement(String.valueOf(sbn.getPostTime()), String.valueOf(sbn.getPostTime()), appName, extra, sbn.getPackageName());
         ListofAllNotification.add(listElement);
 
         Log.d(TAG, "onNotificationPosted TITLE: "+ extraTitle);

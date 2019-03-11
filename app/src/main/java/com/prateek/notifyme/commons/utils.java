@@ -7,6 +7,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 
@@ -108,6 +116,12 @@ public class utils {
         return format.format(time);
     }
 
+    /**
+     * Convert String of Format
+     * 2019 03 10 10:22:28
+     * yyyy MM dd HH:mm:ss
+     * to Date
+     **/
     public static Date parseToDateFromString(String dateString){
         Date parsed;
         try {
@@ -149,6 +163,70 @@ public class utils {
     public static String getTimeToDate(Date time){ ;
         Format format = new SimpleDateFormat("yyyy MM dd");
         return format.format(time);
+    }
+
+    public static Drawable getAppIcon(Context context, String pkg) {
+        try {
+            return context.getPackageManager().getApplicationIcon(pkg);
+        } catch (PackageManager.NameNotFoundException e) {
+            return new ColorDrawable(Color.DKGRAY);
+        }
+    }
+    public static int getAppColor(Context context, String appPackageName) {
+        try {
+            final PackageManager pm = context.getPackageManager();
+            // Retrieve the Resources from the app
+            final Resources res = pm.getResourcesForApplication(appPackageName);
+            // Create the attribute set used to get the colorPrimary color
+            final int[] attrs = new int[] {
+                    /** AppCompat attr */
+                    res.getIdentifier("colorPrimary", "attr", appPackageName),
+                    /** Framework attr */
+                    android.R.attr.colorPrimary
+            };
+
+            // Create a new Theme and apply the style from the launcher Activity
+            final Resources.Theme theme = res.newTheme();
+            if (pm.getLaunchIntentForPackage(appPackageName) == null){
+                return context.getResources().getColor(R.color.darkBlue);
+            }
+            final ComponentName cn = pm.getLaunchIntentForPackage(appPackageName).getComponent();
+            theme.applyStyle(pm.getActivityInfo(cn, 0).theme, false);
+
+            // Obtain the colorPrimary color from the attrs
+            TypedArray a = theme.obtainStyledAttributes(attrs);
+            // Do something with the color
+            final int colorPrimary = a.getColor(0, a.getColor(1, Color.WHITE));
+            // Make sure you recycle the TypedArray
+            a.recycle();
+            a = null;
+            return colorPrimary;
+        } catch (final PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+            return context.getResources().getColor(R.color.darkBlue);
+        }
+    }
+
+    public static Bitmap drawableToBitmap (Drawable drawable) {
+        Bitmap bitmap = null;
+
+        if (drawable instanceof BitmapDrawable) {
+            BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+            if(bitmapDrawable.getBitmap() != null) {
+                return bitmapDrawable.getBitmap();
+            }
+        }
+
+        if(drawable.getIntrinsicWidth() <= 0 || drawable.getIntrinsicHeight() <= 0) {
+            bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888); // Single color bitmap will be created of 1x1 pixel
+        } else {
+            bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        }
+
+        Canvas canvas = new Canvas(bitmap);
+        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+        drawable.draw(canvas);
+        return bitmap;
     }
 
 }
