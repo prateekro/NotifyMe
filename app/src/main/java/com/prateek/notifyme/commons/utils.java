@@ -13,15 +13,23 @@ import android.util.Log;
 import com.prateek.notifyme.R;
 import com.prateek.notifyme.elements.ListElement;
 
+import java.sql.Timestamp;
 import java.text.Format;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Year;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+
+import static java.lang.Math.abs;
 
 public class utils {
     public static String TAG = "TAGGER";
@@ -99,6 +107,50 @@ public class utils {
         Format format = new SimpleDateFormat("yyyy MM dd HH:mm:ss");
         return format.format(time);
     }
+
+    public static Date parseToDateFromString(String dateString){
+        Date parsed;
+        try {
+            SimpleDateFormat format =
+                    //2019 03 10 10:22:28
+                    //yyyy MM dd HH:mm:ss
+                    new SimpleDateFormat("yyyy MM dd HH:mm:ss");
+            parsed = format.parse(dateString);
+            return parsed;
+        }
+        catch(ParseException pe) {
+            throw new IllegalArgumentException(pe);
+        }
+    }
+
+    public static String getTimeAgo(Date sentTime)
+    {
+        Date dt = new Date();
+        long milliseconds1 = sentTime.getTime();
+        long milliseconds2 = dt.getTime();
+
+        long diff = milliseconds2 - milliseconds1;
+        long diffSeconds = diff / 1000;
+        if (abs(diffSeconds) < 60){
+            return abs(diffSeconds) + " sec ago";
+        }
+        long diffMinutes = diff / (60 * 1000);
+        if (abs(diffMinutes) < 60){
+            return abs(diffMinutes) + " min ago";
+        }
+        long diffHours = diff / (60 * 60 * 1000);
+        if (abs(diffHours) < 24){
+            return abs(diffHours) + " hrs ago";
+        }
+        long diffDays = diff / (24 * 60 * 60 * 1000);
+        return abs(diffDays) + " days ago";
+    }
+
+    public static String getTimeToDate(Date time){ ;
+        Format format = new SimpleDateFormat("yyyy MM dd");
+        return format.format(time);
+    }
+
 }
 
 

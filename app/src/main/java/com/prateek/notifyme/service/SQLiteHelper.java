@@ -95,7 +95,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public Cursor getAppNotifications(String appName) {
         SQLiteDatabase db = this.getWritableDatabase();
 //        String whereVal = "'" + appName + "'";
-        String query = "SELECT "+ NOTIFICATION_COL4 +", "+ NOTIFICATION_COL2 +" FROM "+NOTIFICATION_TABLE_NAME + " WHERE "+ NOTIFICATION_COL3 +" = "+"'" + appName+"'";
+        String query = "SELECT "+ NOTIFICATION_COL1 +", "+NOTIFICATION_COL4 +", "+ NOTIFICATION_COL2 +" FROM "+NOTIFICATION_TABLE_NAME + " WHERE "+ NOTIFICATION_COL3 +" = "+"'" + appName+"'";
 
         Cursor data = db.rawQuery(query, null);
         return data;
