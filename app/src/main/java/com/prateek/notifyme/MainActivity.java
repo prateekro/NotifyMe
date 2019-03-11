@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, "Taking you to notifications of "+listElement.getAppName(), Toast.LENGTH_SHORT).show();
                 Intent openNotificationListing = new Intent(getApplicationContext(), NotificationListing.class);
                 openNotificationListing.putExtra("TITLE", listElement.getAppName());
+                openNotificationListing.putExtra("PKG", listElement.getAppID());
                 startActivity(openNotificationListing);
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }

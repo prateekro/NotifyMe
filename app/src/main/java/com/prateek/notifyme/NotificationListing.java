@@ -1,14 +1,20 @@
 package com.prateek.notifyme;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.graphics.Palette;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.prateek.notifyme.adapter.SingleAppListAdapter;
 import com.prateek.notifyme.commons.utils;
@@ -27,9 +33,16 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.prateek.notifyme.commons.utils.getAppColor;
+import static com.prateek.notifyme.commons.utils.getAppIcon;
+import static com.prateek.notifyme.commons.utils.TAG;
+
 public class NotificationListing extends AppCompatActivity {
 
-    String pageTitle = "";
+    String pageTitle = "", pagePKG = "";
+    TextView tv_appname;
+    ImageView iv_appIcon;
+    CardView cv_appBack;
     private ArrayList<SingleListElement> notificationList;
     private SingleAppListAdapter mAppListElementAdapter;
     private ListView lv_listing;
@@ -44,16 +57,38 @@ public class NotificationListing extends AppCompatActivity {
 
         Intent intent = getIntent();
         pageTitle = intent.getStringExtra("TITLE");
+        pagePKG = intent.getStringExtra("PKG");
 
         notificationList = new ArrayList<SingleListElement>();
         lv_listing = (ListView) findViewById(R.id.lv_listing);
-
+        tv_appname = (TextView) findViewById(R.id.tv_listing);
+        iv_appIcon = (ImageView) findViewById(R.id.iv_listing);
+        cv_appBack = (CardView) findViewById(R.id.cv_appBack);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
 
+        tv_appname.setText(pageTitle);
+
+        Log.d(TAG, "APP COLOR$$: "+getAppColor(NotificationListing.this, pagePKG));
+        int appColor = getAppColor(NotificationListing.this, pagePKG);
+        if (appColor != -1){
+            tv_appname.setTextColor(appColor);
+        }
+
+        iv_appIcon.setImageDrawable(getAppIcon(NotificationListing.this, pagePKG));
+
+        Palette.from(utils.drawableToBitmap(getAppIcon(NotificationListing.this, pagePKG))).generate(new Palette.PaletteAsyncListener() {
+            public void onGenerated(Palette p) {
+                // Use generated instance //https://developer.android.com/training/material/palette-colors
+                tv_appname.setTextColor(p.getDominantColor(getResources().getColor(R.color.darkBlue)));
+//                Palette.Swatch vibrantSwatch = p.getVibrantSwatch();
+//                tv_appname.setTextColor(vibrantSwatch.getTitleTextColor());
+//                cv_appBack.setCardBackgroundColor(p.getLightMutedColor(getResources().getColor(R.color.lighterBlue)));
+            }
+        });
 
 
         mAppListElementAdapter = new SingleAppListAdapter(this, R.layout.single_element, notificationList);
