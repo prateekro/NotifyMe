@@ -7,6 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 
@@ -155,6 +160,14 @@ public class utils {
     public static String getTimeToDate(Date time){ ;
         Format format = new SimpleDateFormat("yyyy MM dd");
         return format.format(time);
+    }
+
+    public static Drawable getAppIcon(Context context, String pkg) {
+        try {
+            return context.getPackageManager().getApplicationIcon(pkg);
+        } catch (PackageManager.NameNotFoundException e) {
+            return new ColorDrawable(Color.DKGRAY);
+        }
     }
 
 }

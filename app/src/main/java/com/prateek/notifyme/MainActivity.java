@@ -196,7 +196,8 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(utils.TAG, "%%%%%%%: UPDATE CALLED");
         NotificationService notificationService = new NotificationService(getApplicationContext());
-        HashMap<String, Integer> myAllNotifications = notificationService.getAllNotifications();
+//        HashMap<String, Integer> myAllNotifications = notificationService.getAllNotifications();
+        HashMap<String, ArrayList<String>> myAllNotifications = notificationService.getAllNotifications();
         Set appNames = myAllNotifications.keySet();
         Log.d(utils.TAG, "%%%%%%%: KEYS "+ appNames);
         int i=0;
@@ -204,8 +205,11 @@ public class MainActivity extends AppCompatActivity {
             if (i == 0){
                 appList.clear();
             }
-            Log.d(utils.TAG, "onClick: App: "+ appName.toString()+" Unread: "+myAllNotifications.get(appName));
-            listElements  = new ListElement(" ", " ", appName.toString(), myAllNotifications.get(appName).toString());
+            Log.d(utils.TAG, "onClick: App: "+ appName.toString()+
+                    " Unread: " + myAllNotifications.get(appName).get(0).toString() +
+                    ":: Package: "+ myAllNotifications.get(appName).get(1).toString());
+
+            listElements  = new ListElement(" ", " ", appName.toString(), myAllNotifications.get(appName).get(0).toString(), myAllNotifications.get(appName).get(1).toString());
             appList.add(listElements);
             i++;
         }

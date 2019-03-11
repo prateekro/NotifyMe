@@ -66,6 +66,24 @@ public class SingleListElement {
             return date2.compareTo(date1);
 
             //date2.compareTo(date1);
-        }};
+        }
+    };
+    /*Comparator for remove duplicate the list by text*/
+    public static Comparator<SingleListElement> lsText = new Comparator<SingleListElement>() {
+
+        public int compare(SingleListElement ls1, SingleListElement ls2) {
+
+            String appText1 = ls1.getAppName();
+            String appText2 = ls2.getAppName();
+
+            /*For ascending order*/
+//            return date1.compareTo(date2);
+
+            /*For descending order*/
+            return (appText2.equalsIgnoreCase(appText1)) ? 0 : 1;
+
+            //date2.compareTo(date1);
+        }
+    };
 
 }

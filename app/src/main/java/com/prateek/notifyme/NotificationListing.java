@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -106,6 +108,8 @@ public class NotificationListing extends AppCompatActivity {
             {
                 continue;
             }
+//            if (notificationList.contains() )
+
             notificationList.add(
                     new SingleListElement(
                             utils.getTimeAgo(dt), //Get back days ago /or hrs ago /or min ago /or sec ago
@@ -117,7 +121,9 @@ public class NotificationListing extends AppCompatActivity {
             );
 
         }
+//        notificationList = new ArrayList<SingleListElement>(new LinkedHashSet<SingleListElement>(notificationList));
         Collections.sort(notificationList, SingleListElement.lsTime);
+
         mAppListElementAdapter.notifyDataSetInvalidated();
         mAppListElementAdapter.notifyDataSetChanged();
 

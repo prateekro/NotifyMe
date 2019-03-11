@@ -87,7 +87,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     public Cursor getApplicationListingData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT "+ APPLICATION_COL2 +", "+ APPLICATION_COL4 +" FROM "+APPLICATION_TABLE_NAME;
+        String query = "SELECT "+ APPLICATION_COL2 +", "+ APPLICATION_COL4 +", "+ APPLICATION_COL1 +" FROM "+APPLICATION_TABLE_NAME;
         Cursor data = db.rawQuery(query, null);
         return data;
     }

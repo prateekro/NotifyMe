@@ -17,6 +17,8 @@ import com.prateek.notifyme.elements.ListElement;
 
 import java.util.ArrayList;
 
+import static com.prateek.notifyme.commons.utils.getAppIcon;
+
 //https://stackoverflow.com/questions/8166497/custom-adapter-for-list-view :: Read : three_horizontal_text_views_layout
 
 //https://www.journaldev.com/10416/android-listview-with-custom-adapter-example-tutorial
@@ -79,7 +81,9 @@ public class AppListElementAdapter extends ArrayAdapter<ListElement> {
 //        result.startAnimation(animation);
 //        lastPosition = position;
 
-//        viewHolder.iv_app_icon.setImageDrawable(listElement.getAppName());
+
+        viewHolder.iv_app_icon.setImageDrawable(getAppIcon(mContext, listElement.getAppID().toString()));
+        //listElement.getAppName());
         viewHolder.tv_app_name.setText(listElement.getAppName());
         viewHolder.tv_date.setText(listElement.getDate());
         viewHolder.tv_time.setText(listElement.getTime());

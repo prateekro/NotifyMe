@@ -7,13 +7,15 @@ public class ListElement {
     private String date;
     private String appName;
     private String counter;
+    private String appID;
 //    private String getIn;
 
-    public ListElement(String time, String date, String appName, String counter){
+    public ListElement(String time, String date, String appName, String counter, String appID){
         this.time = time;
         this.date = date;
         this.appName = appName;
         this.counter = counter;
+        this.appID = appID;
     }
 
     public String getAppName() {
@@ -32,6 +34,10 @@ public class ListElement {
         return time;
     }
 
+    public String getAppID() {
+        return appID;
+    }
+
     public void setAppName(String appName) {
         this.appName = appName;
     }
@@ -46,6 +52,10 @@ public class ListElement {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public void setAppID(String appID) {
+        this.appID = appID;
     }
 
     /*Comparator for sorting the list by counter*/
