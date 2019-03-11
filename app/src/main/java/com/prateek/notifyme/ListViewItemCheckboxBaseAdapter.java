@@ -73,13 +73,10 @@ public class ListViewItemCheckboxBaseAdapter extends BaseAdapter {
 
             switchC.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if(b){
-                        listViewItemDtoList.get(itemIndex).setChecked(b);
-                        Log.d(TAG, "onCheckedChanged: "+ b + listViewItemDtoList.get(itemIndex).getItemText());
-                        notifyService.toggleApplication(listViewItemDtoList.get(itemIndex).getItemText());
-                    }
-
+                public void onCheckedChanged(CompoundButton compoundButton, boolean status) {
+                        listViewItemDtoList.get(itemIndex).setChecked(status);
+                        Log.d(TAG, "onCheckedChanged: "+ status + listViewItemDtoList.get(itemIndex).getItemText());
+                        notifyService.toggleApplication(listViewItemDtoList.get(itemIndex).getItemText(), status );
                     //viewHolder.getSwitchCompat().setChecked(b);
                 }
             });

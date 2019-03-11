@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import static com.prateek.notifyme.commons.utils.TAG;
 
@@ -139,12 +140,16 @@ public class NotificationService {
 //
 //    }
 
-    public void toggleApplication(String appName){
+    public void toggleApplication(String appName, boolean status){
         Log.d(TAG, "first enter toggleApplication: "+appName);
         Cursor cur = mDatabaseHelper.getEnabledDB(appName);
         Log.d(TAG, "after curr toggleApplication: "+appName);
         while(cur.moveToNext()){
             String isEnabled = cur.getString(0);
+
+            if(isEnabled.equalsIgnoreCase(String.valueOf(status))) {
+                return;
+            }
             System.out.print(isEnabled);
             Log.d(TAG, "toggleApplication: "+isEnabled);
             if(isEnabled.equalsIgnoreCase("true")){
