@@ -4,10 +4,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-import com.prateek.notifyme.MainActivity;
 import com.prateek.notifyme.beans.ApplicationBean;
 import com.prateek.notifyme.beans.NotificationBean;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -57,6 +57,11 @@ public class NotificationService {
         //boolean variable for checking the success of events
         boolean isUpdated, isAppInserted, isNotificationSuccess ;
         isNotificationSuccess = mDatabaseHelper.saveNotificationDB(appName, time, text, appId);
+        if (isNotificationSuccess){
+            Log.d(TAG, "saveNotification BOOLEAN: "+isNotificationSuccess);
+        }else {
+            Log.d(TAG, "saveNotification BOOLEAN: "+isNotificationSuccess);
+        }
         if(mDatabaseHelper.isAppPresent(appId)){
             Cursor cur = mDatabaseHelper.getUnreadNotificationCount(appId);
 
@@ -94,12 +99,18 @@ public class NotificationService {
     }
 
     //
-    public HashMap<String, Integer> getAppNotifications(String appName) {
-        HashMap<String, Integer> textMap = new HashMap<String, Integer>();
+    public HashMap<String, ArrayList<String>> getAppNotifications(String appName) {
+        HashMap<String, ArrayList<String>> textMap = new HashMap<String, ArrayList<String>>();
         Cursor data = mDatabaseHelper.getAppNotifications(appName);
         while (data.moveToNext()) {
+            Log.d(TAG, "getAppNotifications CHECK: "+data.getString(0) + data.getInt(1));
             // get all names and put in list
-            textMap.put(data.getString(0), data.getInt(1));
+            ArrayList <String> dataX = new ArrayList<String>();
+            String txt = data.getString(1);
+            String timeStamp = data.getString(2);
+            dataX.add(txt);
+            dataX.add(timeStamp);
+            textMap.put(data.getString(0), dataX);
         }
         return textMap;
     }
