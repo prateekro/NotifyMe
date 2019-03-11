@@ -10,15 +10,15 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.prateek.notifyme.R;
-import com.prateek.notifyme.elements.ListElement;
+import com.prateek.notifyme.elements.SingleListElement;
 
 import java.util.ArrayList;
 
-public class SingleAppListAdapter extends ArrayAdapter<ListElement> {
+public class SingleAppListAdapter extends ArrayAdapter<SingleListElement> {
 
 
     private int layoutResource;
-    private ArrayList<ListElement> appList;
+    private ArrayList<SingleListElement> appList;
     private Context mContext;
 
     private static class ViewHolder {
@@ -29,7 +29,7 @@ public class SingleAppListAdapter extends ArrayAdapter<ListElement> {
         //ImageView info;
     }
 
-    public SingleAppListAdapter(@NonNull Context context, int layoutResource, ArrayList<ListElement> applist) {
+    public SingleAppListAdapter(@NonNull Context context, int layoutResource, ArrayList<SingleListElement> applist) {
         super(context, layoutResource, applist);
         this.layoutResource = layoutResource;
         this.appList = applist;
@@ -41,7 +41,7 @@ public class SingleAppListAdapter extends ArrayAdapter<ListElement> {
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        ListElement listElement = getItem(position);
+        SingleListElement listElement = getItem(position);
 
         SingleAppListAdapter.ViewHolder viewHolder;
 

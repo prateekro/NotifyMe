@@ -108,6 +108,12 @@ public class utils {
         return format.format(time);
     }
 
+    /**
+     * Convert String of Format
+     * 2019 03 10 10:22:28
+     * yyyy MM dd HH:mm:ss
+     * to Date
+     **/
     public static Date parseToDateFromString(String dateString){
         Date parsed;
         try {

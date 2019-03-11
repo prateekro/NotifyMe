@@ -17,9 +17,11 @@ import com.prateek.notifyme.adapter.AppListElementAdapter;
 import com.prateek.notifyme.commons.MySharedPreference;
 import com.prateek.notifyme.commons.utils;
 import com.prateek.notifyme.elements.ListElement;
+import com.prateek.notifyme.elements.SingleListElement;
 import com.prateek.notifyme.service.NotificationService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Timer;
@@ -110,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 ListElement listElement = appList.get(position);
-                Toast.makeText(MainActivity.this, listElement.getAppName() +" :: date "+ listElement.getDate(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Taking you to notifications of "+listElement.getAppName(), Toast.LENGTH_SHORT).show();
                 Intent openNotificationListing = new Intent(getApplicationContext(), NotificationListing.class);
                 openNotificationListing.putExtra("TITLE", listElement.getAppName());
                 startActivity(openNotificationListing);
@@ -208,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
             i++;
         }
 
+        Collections.sort(appList, ListElement.lsCounter);
         applistadapter.notifyDataSetInvalidated();
         applistadapter.notifyDataSetChanged();
 
