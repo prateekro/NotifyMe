@@ -1,6 +1,7 @@
 package com.prateek.notifyme;
 
 import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -154,6 +155,13 @@ public class NotificationListing extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Log.d(TAG, "onItemClick: CLICKED at: " + position);
+                try {
+                    Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pagePKG);
+                    if (launchIntent != null)
+                        startActivity(launchIntent);
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
