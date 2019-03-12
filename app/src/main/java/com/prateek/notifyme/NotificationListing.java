@@ -16,6 +16,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.prateek.notifyme.adapter.AppListElementAdapter;
 import com.prateek.notifyme.adapter.SingleAppListAdapter;
 import com.prateek.notifyme.commons.utils;
 import com.prateek.notifyme.elements.ListElement;
@@ -64,6 +71,16 @@ public class NotificationListing extends AppCompatActivity {
         tv_appname = (TextView) findViewById(R.id.tv_listing);
         iv_appIcon = (ImageView) findViewById(R.id.iv_listing);
         cv_appBack = (CardView) findViewById(R.id.cv_appBack);
+
+        //test code
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("notifications");
+//        myRef.setValue("Hello, World!");
+//        myRef.setValue("Check instance");
+//        myRef.child("user1").child("txt").setValue("text 2");
+        String txt = String.valueOf(myRef.child("user1").child("instagram").child("1").child("txt"));
+        System.out.println("*****");
+        System.out.println(txt);
     }
 
     @Override

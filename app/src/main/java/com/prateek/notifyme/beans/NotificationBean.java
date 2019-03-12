@@ -18,6 +18,13 @@ public class NotificationBean {
         this.appId = appId;
     }
 
+    public NotificationBean() {
+        id = "1111";
+        appName = "whatsapp";
+        appId = "com.whatsapp";
+        text = "Constructor TEXT";
+    }
+
     public NotificationBean(Date timestamp, String appName, String text, String appId) {
         this.timestamp = timestamp;
         this.appName = appName;

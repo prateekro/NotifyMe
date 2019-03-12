@@ -16,7 +16,13 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.prateek.notifyme.adapter.AppListElementAdapter;
+import com.prateek.notifyme.beans.NotificationBean;
 import com.prateek.notifyme.commons.MySharedPreference;
 import com.prateek.notifyme.commons.utils;
 import com.prateek.notifyme.elements.ListElement;
@@ -26,6 +32,7 @@ import com.prateek.notifyme.service.NotificationService;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -48,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
     TimerTask timedNotificationUpdate;
     private static final int DEFAULT_THRESHOLD = 128;
 
+
+    private DatabaseReference mPostReference;
+    private ValueEventListener mPostListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +94,10 @@ public class MainActivity extends AppCompatActivity {
 //        timerHandler = new Timer();
 
 //        timerHandler.schedule(timedNotificationUpdate, 0, 3000);
+
+        //firebase - get reference
+        mPostReference = FirebaseDatabase.getInstance().getReference()
+                .child("notifications").child("user1");
 
     }
 
@@ -144,7 +158,35 @@ public class MainActivity extends AppCompatActivity {
 
 //
 //            }
-//        });
+//        }]]['
+
+
+        //test archive storage
+        NotificationService.archiveNotification("sam@gy.com", "com.whatsapp", "Whatsapp", "Test notify","2345678901");
+
+        //get archived notification code
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // Get Post object and use the values to update the UI
+//                NotificationBean notification = dataSnapshot.getValue(NotificationBean.class);
+//                HashMap map = dataSnapshot.getValue(HashMap.class);
+                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
+                System.out.println("### YeP! ");
+                for (Object key : map.keySet()) {
+                    System.out.println("//// "+map.get(key));
+                    // Set data in View list
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                // Getting Post failed, log a message
+                System.out.println("^^^ ERROR: "+ databaseError.toString());
+            }
+        };
+        mPostReference.addValueEventListener(postListener);
+        mPostListener = postListener;
     }
 
     @Override
@@ -166,6 +208,15 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         timerHandler.schedule(timedNotificationUpdate, 0, 3000);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        // Remove post value event listener
+        if (mPostListener != null) {
+            mPostReference.removeEventListener(mPostListener);
+        }
     }
 
     private View.OnClickListener tapFetcher = new View.OnClickListener() {
