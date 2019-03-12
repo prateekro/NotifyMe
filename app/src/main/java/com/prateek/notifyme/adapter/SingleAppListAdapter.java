@@ -107,7 +107,7 @@ public class SingleAppListAdapter extends ArrayAdapter<SingleListElement> {
                 notifyDataSetChanged();
             }
         });
-//        viewHolder.tv_counter.setText(listElement.getCounter());
+//        viewHolder.tv_counter.setText(listElement.getAppTextExtra());
 
         return result;
     }
