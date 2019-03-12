@@ -12,6 +12,7 @@ import android.view.ViewConfiguration;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
     private DatabaseReference mPostReference;
     private ValueEventListener mPostListener;
+    private Priority priority = Priority.HIGH;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,11 +99,61 @@ public class MainActivity extends AppCompatActivity {
 //        timerHandler = new Timer();
 
 //        timerHandler.schedule(timedNotificationUpdate, 0, 3000);
+        final NotificationService notificationService = new NotificationService(getApplicationContext());
 
-        //firebase - get reference
-        mPostReference = FirebaseDatabase.getInstance().getReference()
-                .child("notifications").child("user1");
+        Button high = findViewById(R.id.buttonHigh);
+        high.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    appList.clear();
+                for(Map.Entry<String, ArrayList<String>> entry : notificationService.getAllNotifications().entrySet()) {
+                   if (Priority.HIGH == Priority.valueOf(entry.getValue().get(2).toString())) {
+                       appList.add(new ListElement(" ", " ", entry.getKey().toString(), entry.getValue().get(0).toString(), entry.getValue().get(1).toString()));
+                   }
+                }
+                priority = Priority.HIGH;
+                Collections.sort(appList, ListElement.lsCounter);
+                applistadapter.notifyDataSetInvalidated();
+                applistadapter.notifyDataSetChanged();
+            }
+        });
 
+        Button medium = findViewById(R.id.buttonMedium);
+
+        medium.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                appList.clear();
+                for(Map.Entry<String, ArrayList<String>> entry : notificationService.getAllNotifications().entrySet()) {
+                    if (Priority.MEDIUM == Priority.valueOf(entry.getValue().get(2).toString())) {
+                        appList.add(new ListElement(" ", " ", entry.getKey().toString(), entry.getValue().get(0).toString(), entry.getValue().get(1).toString()));
+                    }
+
+                }
+                priority = Priority.MEDIUM;
+                Collections.sort(appList, ListElement.lsCounter);
+                applistadapter.notifyDataSetInvalidated();
+                applistadapter.notifyDataSetChanged();
+            }
+        });
+
+        Button low = findViewById(R.id.buttonLow);
+        low.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                appList.clear();
+                for(Map.Entry<String, ArrayList<String>> entry : notificationService.getAllNotifications().entrySet()) {
+                    if (Priority.LOW == Priority.valueOf(entry.getValue().get(2).toString())) {
+                        appList.add(new ListElement(" ", " ", entry.getKey().toString(), entry.getValue().get(0).toString(), entry.getValue().get(1).toString()));
+                    }
+
+                }
+                priority = Priority.LOW;
+                Collections.sort(appList, ListElement.lsCounter);
+                applistadapter.notifyDataSetInvalidated();
+                applistadapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void TimerMethod() {
@@ -213,15 +265,6 @@ public class MainActivity extends AppCompatActivity {
         timerHandler.schedule(timedNotificationUpdate, 0, 3000);
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        // Remove post value event listener
-        if (mPostListener != null) {
-            mPostReference.removeEventListener(mPostListener);
-        }
-    }
-
     private View.OnClickListener tapFetcher = new View.OnClickListener() {
         public void onClick(View v) {
             // do something when the button is clicked
@@ -270,9 +313,9 @@ public class MainActivity extends AppCompatActivity {
             Log.d(utils.TAG, "onClick: App: "+ appName.toString()+
                     " Unread: " + myAllNotifications.get(appName).get(0).toString() +
                     ":: Package: "+ myAllNotifications.get(appName).get(1).toString());
-
-            listElements  = new ListElement(" ", " ", appName.toString(), myAllNotifications.get(appName).get(0).toString(), myAllNotifications.get(appName).get(1).toString());
-            appList.add(listElements);
+            if (priority == Priority.valueOf(myAllNotifications.get(appName).get(2).toString())) {
+                appList.add(new ListElement(" ", " ", appName.toString(), myAllNotifications.get(appName).get(0).toString(), myAllNotifications.get(appName).get(1).toString()));
+            }
             i++;
         }
 

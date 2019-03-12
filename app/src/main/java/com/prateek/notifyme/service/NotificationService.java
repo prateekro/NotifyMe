@@ -134,9 +134,10 @@ public class NotificationService {
             ArrayList <String> dataX = new ArrayList<String>();
             String app_nm = String.valueOf(data.getInt(1));
             String packg = data.getString(2);
+            String priority = data.getString(3);
             dataX.add(app_nm);
             dataX.add(packg);
-
+            dataX.add(priority);
             listData.put(data.getString(0), dataX); //appname unread package
         }
         return listData;
