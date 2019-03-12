@@ -13,6 +13,7 @@ import com.prateek.notifyme.beans.NotificationBean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 import static com.prateek.notifyme.commons.utils.TAG;
@@ -66,7 +67,7 @@ public class NotificationService {
 
             while(cur.moveToNext()){
 
-                isUpdated = mDatabaseHelper.updateAppTable(appId,Integer.parseInt(cur.getString(0)));
+                isUpdated = mDatabaseHelper.updateAppTable(appName,cur.getInt(0)+1);
                 if (isUpdated ){
                     Log.d(TAG, "saveNotification: OK #");
                 }else{
@@ -77,7 +78,7 @@ public class NotificationService {
         }
         else{
 
-            isAppInserted = mDatabaseHelper.insertApp(appId, appName, enabled,"1", Priority.HIGH.name());
+            isAppInserted = mDatabaseHelper.insertApp(appId, appName, enabled,1, Priority.HIGH.name());
             if (isAppInserted){
                 Log.d(TAG, "saveNotification:@@ OK #");
             }else{
@@ -133,7 +134,7 @@ public class NotificationService {
 
     //on app tap from dashboard, the unread counter should reset
     public void resetCounter(String appName){
-
+        mDatabaseHelper.updateAppTable(appName,0);
     }
 
     //delete a particular notification
