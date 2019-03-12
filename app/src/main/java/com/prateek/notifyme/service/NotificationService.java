@@ -13,8 +13,7 @@ import com.prateek.notifyme.beans.NotificationBean;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.Set;
 
 import static com.prateek.notifyme.commons.utils.TAG;
 
@@ -98,24 +97,36 @@ public class NotificationService {
     }
 
     //
-    public HashMap<String, Integer> getAppNotifications(String appName) {
-        HashMap<String, Integer> textMap = new HashMap<String, Integer>();
+    public HashMap<String, ArrayList<String>> getAppNotifications(String appName) {
+        HashMap<String, ArrayList<String>> textMap = new HashMap<String, ArrayList<String>>();
         Cursor data = mDatabaseHelper.getAppNotifications(appName);
         while (data.moveToNext()) {
+            Log.d(TAG, "getAppNotifications CHECK: "+data.getString(0) + data.getInt(1));
             // get all names and put in list
-            textMap.put(data.getString(0), data.getInt(1));
+            ArrayList <String> dataX = new ArrayList<String>();
+            String txt = data.getString(1);
+            String timeStamp = data.getString(2);
+            dataX.add(txt);
+            dataX.add(timeStamp);
+            textMap.put(data.getString(0), dataX);
         }
         return textMap;
     }
 
     //retrieve all app listings along with their unread counter for dashboard page
-    public HashMap<String, Integer> getAllNotifications(){
+    public HashMap<String, ArrayList<String>> getAllNotifications(){
         Cursor data = mDatabaseHelper.getApplicationListingData();
-        HashMap<String, Integer> listData = new HashMap<String, Integer>();
+        HashMap<String, ArrayList<String>> listData = new HashMap<String, ArrayList<String>>();
         while (data.moveToNext()) {
             // get all names and put in list
             Log.d(TAG, "getAllNotifications: @@"+data.getString(0)+data.getString(1));
-            listData.put(data.getString(0), data.getInt(1));
+            ArrayList <String> dataX = new ArrayList<String>();
+            String app_nm = String.valueOf(data.getInt(1));
+            String packg = data.getString(2);
+            dataX.add(app_nm);
+            dataX.add(packg);
+
+            listData.put(data.getString(0), dataX); //appname unread package
         }
         return listData;
     }

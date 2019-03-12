@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.util.Log;
 
 import com.prateek.notifyme.Priority;
 import com.prateek.notifyme.R;
@@ -93,15 +94,16 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     public Cursor getApplicationListingData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT "+ APPLICATION_COL2 +", "+ APPLICATION_COL4 +" FROM "+APPLICATION_TABLE_NAME;
+        String query = "SELECT "+ APPLICATION_COL2 +", "+ APPLICATION_COL4 +", "+ APPLICATION_COL1 +" FROM "+APPLICATION_TABLE_NAME;
         Cursor data = db.rawQuery(query, null);
         return data;
     }
 
     public Cursor getAppNotifications(String appName) {
         SQLiteDatabase db = this.getWritableDatabase();
-        String whereVal = "'" + appName + "'";
-        String query = "SELECT "+ NOTIFICATION_COL4 +", "+ NOTIFICATION_COL2 +" FROM "+NOTIFICATION_TABLE_NAME + " WHERE "+ NOTIFICATION_COL3+"="+whereVal;
+//        String whereVal = "'" + appName + "'";
+        String query = "SELECT "+ NOTIFICATION_COL1 +", "+NOTIFICATION_COL4 +", "+ NOTIFICATION_COL2 +" FROM "+NOTIFICATION_TABLE_NAME + " WHERE "+ NOTIFICATION_COL3 +" = "+"'" + appName+"'";
+
         Cursor data = db.rawQuery(query, null);
         return data;
     }
@@ -115,6 +117,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         values.put(NOTIFICATION_COL4, text);
         //values.put(NOTIFICATION_COL5, appId);
         long result = db.insert(NOTIFICATION_TABLE_NAME, null, values);
+        Log.d(TAG, "saveNotificationDB CHECK: "+result);
         if (result == -1)
             return false;
         else

@@ -11,16 +11,21 @@
         android:roundIcon="@mipmap/icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SignIn">
+        <activity android:name=".SignIn"
+            android:theme="@style/SignInScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".NotificationListing" />
-        <activity android:name=".MainActivity" />
-        <activity android:name=".SettingPageActivity" />
-        <activity android:name=".SubSettingPageActivity"/>
+        <activity android:name=".NotificationListing"
+            android:theme="@style/AppFullScreenTheme"/>
+        <activity android:name=".MainActivity"
+            android:theme="@style/MainScreenTheme"/>
+        <activity android:name=".SettingPageActivity"
+            android:theme="@style/AppFullScreenTheme"/>
+        <activity android:name=".SubSettingPageActivity"
+            android:theme="@style/AppFullScreenTheme"/>
 
         <service
             android:name=".AllNotificationListener"
