@@ -38,4 +38,10 @@ public class SubSettingPageActivity extends AppCompatActivity {
         }
         return ret;
     }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.slide_to_right, R.anim.slide_from_left);
+    }
 }

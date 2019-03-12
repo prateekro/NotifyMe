@@ -54,6 +54,11 @@ public class SettingPageActivity extends AppCompatActivity {
         switch (name) {
             case "App Configure":
                 startActivity(new Intent(SettingPageActivity.this, SubSettingPageActivity.class));
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                break;
+            case "Archive Notifications":
+                startActivity(new Intent(SettingPageActivity.this, ArchiveActivity.class));
+                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
                 break;
             case "Rate my app":
                 rateMe();
@@ -68,8 +73,11 @@ public class SettingPageActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Signed out !! ", Toast.LENGTH_SHORT).show();
                 mAuth.signOut();
                 Intent intent = new Intent(getApplicationContext(), SignIn.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
-                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
+                finish();
+                overridePendingTransition(R.anim.slide_to_right, R.anim.slide_from_left);
+//                overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
 
                 break;
         }
@@ -87,9 +95,16 @@ public class SettingPageActivity extends AppCompatActivity {
 
     private void init() {
         dataForSetting.add("App Configure");
+        dataForSetting.add("Archive Notifications");
         dataForSetting.add("Rate my app");
         dataForSetting.add("Share");
         dataForSetting.add("Sign out");
         dataForSetting.add("Version");
+    }
+
+    @Override
+    public void onBackPressed() {
+        finish();
+        overridePendingTransition(R.anim.slide_to_right, R.anim.slide_from_left);
     }
 }
