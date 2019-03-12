@@ -84,10 +84,18 @@ public class SignIn extends AppCompatActivity {
 
                         if (et_confirm_pass.getVisibility() == View.VISIBLE){
                             //Call service to signUp and (default login?) and take to MainActivity
-                            //TODO: Set null checks and messages
-                            if(!et_username.getText().toString().isEmpty() && !et_password.getText().toString().isEmpty())
-                            createAccount(et_username.getText().toString(), et_password.getText().toString());
-//                            startActivity(new Intent(SignIn.this, MainActivity.class));
+                            System.out.println("#######");
+//                            System.out.println(et_password.getText().toString());
+//                            System.out.println(et_confirm_pass.getText().toString());
+                            Log.d(TAG, "pass: "+ et_password.getText().toString());
+                            Log.d(TAG, "cnf pass: "+et_confirm_pass.getText().toString());
+                            if (et_confirm_pass.getText().toString().equals(et_password.getText().toString())) {
+                                if (!et_username.getText().toString().isEmpty() && !et_password.getText().toString().isEmpty())
+                                    createAccount(et_username.getText().toString(), et_password.getText().toString());
+                                //                            startActivity(new Intent(SignIn.this, MainActivity.class));
+                            } else {
+                                Toast.makeText(SignIn.this, "Password & Confirm Password do not match", Toast.LENGTH_SHORT).show();
+                            }
                         }else{
 
                             tv_banner.setText(R.string.sign_up);

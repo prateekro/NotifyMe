@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -156,9 +157,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 appList.clear();
                 for(Map.Entry<String, ArrayList<String>> entry : notificationService.getAllNotifications().entrySet()) {
-                    if (Priority.HIGH == Priority.valueOf(entry.getValue().get(2).toString())) {
-                        appList.add(new ListElement(" ", " ", entry.getKey().toString(), entry.getValue().get(0).toString(), entry.getValue().get(1).toString()));
-                    }
+                   if (Priority.HIGH == Priority.valueOf(entry.getValue().get(2).toString()) && "true".equalsIgnoreCase(entry.getValue().get(3).toString())) {
+                       appList.add(new ListElement(" ", " ", entry.getKey().toString(), entry.getValue().get(0).toString(), entry.getValue().get(1).toString()));
+                   }
                 }
                 priority = Priority.HIGH;
                 setButtonStyle(priority);
@@ -173,7 +174,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 appList.clear();
                 for(Map.Entry<String, ArrayList<String>> entry : notificationService.getAllNotifications().entrySet()) {
-                    if (Priority.MEDIUM == Priority.valueOf(entry.getValue().get(2).toString())) {
+                    if (Priority.MEDIUM == Priority.valueOf(entry.getValue().get(2).toString()) && "true".equalsIgnoreCase(entry.getValue().get(3).toString())) {
                         appList.add(new ListElement(" ", " ", entry.getKey().toString(), entry.getValue().get(0).toString(), entry.getValue().get(1).toString()));
                     }
 
@@ -191,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 appList.clear();
                 for(Map.Entry<String, ArrayList<String>> entry : notificationService.getAllNotifications().entrySet()) {
-                    if (Priority.LOW == Priority.valueOf(entry.getValue().get(2).toString())) {
+                    if (Priority.LOW == Priority.valueOf(entry.getValue().get(2).toString()) && "true".equalsIgnoreCase(entry.getValue().get(3).toString())) {
                         appList.add(new ListElement(" ", " ", entry.getKey().toString(), entry.getValue().get(0).toString(), entry.getValue().get(1).toString()));
                     }
 
@@ -310,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d(utils.TAG, "onClick: App: "+ appName.toString()+
                     " Unread: " + myAllNotifications.get(appName).get(0).toString() +
                     ":: Package: "+ myAllNotifications.get(appName).get(1).toString());
-            if (priority == Priority.valueOf(myAllNotifications.get(appName).get(2).toString())) {
+            if (priority == Priority.valueOf(myAllNotifications.get(appName).get(2).toString()) && "true".equalsIgnoreCase(myAllNotifications.get(appName).get(3).toString())) {
                 appList.add(new ListElement(" ", " ", appName.toString(), myAllNotifications.get(appName).get(0).toString(), myAllNotifications.get(appName).get(1).toString()));
             }
             i++;
