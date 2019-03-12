@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.prateek.notifyme.Priority;
 import com.prateek.notifyme.R;
@@ -44,7 +45,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 //    private static final String APPLICATION_COL10= "userId";
 
     public SQLiteHelper(Context context) {
-        super(context, String.valueOf(R.string.app_name), null, 1);
+        super(context, String.valueOf(R.string.app_name), null, 6);
     }
 
     @Override
@@ -71,7 +72,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 APPLICATION_COL2+ " TEXT, "+
                 APPLICATION_COL3+ " TEXT, "+
                 APPLICATION_COL4+ " TEXT, "+
-                APPLICATION_COL5+ "TEXT) ";
+                APPLICATION_COL5+ " TEXT); ";
 //                APPLICATION_COL6+ "TEXT, "+
 //                APPLICATION_COL7+ "TEXT, "+
 //                APPLICATION_COL8+ "DATETIME, "+
@@ -82,9 +83,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS "+ USER_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS "+ NOTIFICATION_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS "+ APPLICATION_TABLE_NAME);
+        System.out.println("$$$ UPGRADE");
+        if (newVersion > oldVersion) {
+            db.execSQL("DROP TABLE IF EXISTS " + USER_TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + NOTIFICATION_TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS " + APPLICATION_TABLE_NAME);
+        }
     }
 
     public Cursor getApplicationListingData() {
