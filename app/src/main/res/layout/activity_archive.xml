@@ -39,7 +39,7 @@
                 app:layout_constraintHorizontal_bias="0.8"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@android:color/holo_blue_dark" />
+                app:srcCompat="@mipmap/archive" />
 
             <TextView
                 android:id="@id/tv_listing"

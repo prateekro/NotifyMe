@@ -109,7 +109,7 @@
         <Button
             android:id="@+id/buttonHigh"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:layout_width="114dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="HIGH"
