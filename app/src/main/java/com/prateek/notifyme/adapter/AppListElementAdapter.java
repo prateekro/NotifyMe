@@ -24,6 +24,7 @@ import com.prateek.notifyme.R;
 import com.prateek.notifyme.elements.ListElement;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 import static com.prateek.notifyme.commons.utils.TAG;
 import static com.prateek.notifyme.commons.utils.getAppIcon;
@@ -100,7 +101,7 @@ public class AppListElementAdapter extends ArrayAdapter<ListElement>{
         viewHolder.tv_app_name.setText(listElement.getAppName());
         viewHolder.tv_date.setText(listElement.getDate());
         viewHolder.tv_time.setText(listElement.getTime());
-        viewHolder.tv_counter.setText(listElement.getCounter());
+        viewHolder.tv_counter.setText(Objects.equals(listElement.getCounter(), "0") ? "" : listElement.getCounter());
 
         return result;
     }

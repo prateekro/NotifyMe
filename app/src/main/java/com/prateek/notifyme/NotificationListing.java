@@ -1,10 +1,12 @@
 package com.prateek.notifyme;
 
+import android.content.DialogInterface;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
@@ -61,6 +63,9 @@ public class NotificationListing extends AppCompatActivity {
     TimerTask timedNotificationUpdate;
     FloatingActionButton clearButton;
 
+    AlertDialog.Builder alertDialog;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,8 +75,6 @@ public class NotificationListing extends AppCompatActivity {
         Intent intent = getIntent();
         pageTitle = intent.getStringExtra("TITLE");
         pagePKG = intent.getStringExtra("PKG");
-        System.out.println("$$$$ PKG NAME:");
-        System.out.println(pagePKG);
 
         notificationList = new ArrayList<SingleListElement>();
         lv_listing = (ListView) findViewById(R.id.lv_listing);
@@ -90,6 +93,8 @@ public class NotificationListing extends AppCompatActivity {
         System.out.println("*****");
         System.out.println(txt);
 
+        alertDialog = new AlertDialog.Builder(NotificationListing.this);
+
     }
 
     @Override
@@ -97,6 +102,16 @@ public class NotificationListing extends AppCompatActivity {
         super.onStart();
 
         tv_appname.setText(pageTitle);
+        alertDialog.setTitle(pageTitle);
+        alertDialog.setIcon(getAppIcon(NotificationListing.this, pagePKG));
+        alertDialog.setCancelable(true);
+        alertDialog.setPositiveButton("Read!",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Write your code here to execute after dialog
+                        dialog.cancel();
+                    }
+                });
 
         Log.d(TAG, "APP COLOR$$: " + getAppColor(NotificationListing.this, pagePKG));
         int appColor = getAppColor(NotificationListing.this, pagePKG);
@@ -127,7 +142,9 @@ public class NotificationListing extends AppCompatActivity {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Log.d(TAG, "### onItemLongClick: LONG CLICKED at: "+position);
+                Log.d(TAG, "onItemLongClick: LONG CLICKED at: "+position);
+                alertDialog.setMessage(notificationList.get(position).getAppName());
+                alertDialog.show();
                 return false;
             }
 
