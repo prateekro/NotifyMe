@@ -20,6 +20,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     private static final String NOTIFICATION_COL3 = "APPNAME";
     private static final String NOTIFICATION_COL4 = "TXT";
     private static final String NOTIFICATION_COL5 = "PRIORITY";
+    private static final String NOTIFICATION_COL6 = "appid";
 
     private static final String USER_TABLE_NAME = "user_table";
     private static final String USER_COL1 = "EMAIL";
@@ -42,17 +43,23 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 //    private static final String APPLICATION_COL10= "userId";
 
     public SQLiteHelper(Context context) {
-        super(context, String.valueOf(R.string.app_name), null, 1);
+        super(context, String.valueOf(R.string.app_name), null, 3);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        createTables(db);
+
+    }
+
+    private void createTables(SQLiteDatabase db) {
         String createTable_notification = "CREATE TABLE " + NOTIFICATION_TABLE_NAME + " (" +
                 NOTIFICATION_COL1+ " INTEGER PRIMARY KEY AUTOINCREMENT, "+
                 NOTIFICATION_COL2+ " DATETIME NOT NULL, "+
                 NOTIFICATION_COL3+ " TEXT NOT NULL, "+
                 NOTIFICATION_COL4+ " TEXT NOT NULL, "+
-                NOTIFICATION_COL5+ " TEXT NOT NULL); ";
+                NOTIFICATION_COL5+ " TEXT NOT NULL, "+
+                NOTIFICATION_COL6+ " TEXT NOT NULL); ";
         db.execSQL(createTable_notification);
 
         String createTable_user = "CREATE TABLE " + USER_TABLE_NAME+ " (" +
@@ -80,9 +87,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS "+ USER_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS "+ NOTIFICATION_TABLE_NAME);
-        db.execSQL("DROP TABLE IF EXISTS "+ APPLICATION_TABLE_NAME);
+        if (newVersion > oldVersion){
+            Log.d(TAG, "onUpgrade: UPDATED DATABASE");
+            db.execSQL("DROP TABLE IF EXISTS "+ USER_TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS "+ NOTIFICATION_TABLE_NAME);
+            db.execSQL("DROP TABLE IF EXISTS "+ APPLICATION_TABLE_NAME);
+            createTables(db);
+        }
     }
 
     public Cursor getApplicationListingData() {
@@ -95,7 +106,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public Cursor getAppNotifications(String appName) {
         SQLiteDatabase db = this.getWritableDatabase();
 //        String whereVal = "'" + appName + "'";
-        String query = "SELECT "+ NOTIFICATION_COL1 +", "+NOTIFICATION_COL4 +", "+ NOTIFICATION_COL2 +" FROM "+NOTIFICATION_TABLE_NAME + " WHERE "+ NOTIFICATION_COL3 +" = "+"'" + appName+"'";
+        String query = "SELECT "+ NOTIFICATION_COL1 +", "+NOTIFICATION_COL4 +", "+ NOTIFICATION_COL2 + ", " + NOTIFICATION_COL6 +" FROM "+NOTIFICATION_TABLE_NAME + " WHERE "+ NOTIFICATION_COL3 +" = "+"'" + appName+"'";
 
         Cursor data = db.rawQuery(query, null);
         return data;
@@ -103,12 +114,14 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     // saves the notification in NOTIFICATION_TABLE_NAME
     public boolean saveNotificationDB(String appName, Date time, String text, String appId){
+        Log.d(TAG, "saveNotificationDB ###: "+appName +" :: "+ time +" :: "+ text +" :: "+ appId);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(NOTIFICATION_COL2, utils.timeToString(time));
         values.put(NOTIFICATION_COL3, appName);
         values.put(NOTIFICATION_COL4, text);
-        values.put(NOTIFICATION_COL5, appId);
+        values.put(NOTIFICATION_COL5, R.string.HIGH);
+        values.put(NOTIFICATION_COL6, appId);
         long result = db.insert(NOTIFICATION_TABLE_NAME, null, values);
         Log.d(TAG, "saveNotificationDB CHECK: "+result);
         if (result == -1)

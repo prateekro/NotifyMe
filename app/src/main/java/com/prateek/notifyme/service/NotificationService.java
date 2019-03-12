@@ -22,7 +22,7 @@ import static com.prateek.notifyme.commons.utils.TAG;
 
 public class NotificationService {
 
-    SQLiteHelper mDatabaseHelper;
+    private static SQLiteHelper mDatabaseHelper;
     Context mContext;
     static DatabaseReference firebaseNotificationReference;
 
@@ -116,8 +116,10 @@ public class NotificationService {
             ArrayList <String> dataX = new ArrayList<String>();
             String txt = data.getString(1);
             String timeStamp = data.getString(2);
+            String pkg = data.getString(3);
             dataX.add(txt);
             dataX.add(timeStamp);
+            dataX.add(pkg);
             textMap.put(data.getString(0), dataX);
         }
         return textMap;
@@ -147,7 +149,7 @@ public class NotificationService {
     }
 
     //delete a particular notification
-    public void deleteNotification(String id){
+    public static void deleteNotification(String id){
         boolean isDeleted = mDatabaseHelper.deleteNotificationDB(id);
     }
 

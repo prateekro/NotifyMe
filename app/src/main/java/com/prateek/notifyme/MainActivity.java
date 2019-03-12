@@ -28,6 +28,7 @@ import com.prateek.notifyme.commons.utils;
 import com.prateek.notifyme.elements.ListElement;
 import com.prateek.notifyme.elements.SingleListElement;
 import com.prateek.notifyme.service.NotificationService;
+import com.prateek.notifyme.service.SQLiteHelper;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        SQLiteHelper sqLiteHelper = new SQLiteHelper(getApplicationContext());
 
 
         notificationServiceIntent = new Intent(getApplicationContext(), AllNotificationListener.class);
@@ -161,8 +164,8 @@ public class MainActivity extends AppCompatActivity {
 //        }]]['
 
 
-        //test archive storage
-        NotificationService.archiveNotification("sam@gy.com", "com.whatsapp", "Whatsapp", "Test notify","2345678901");
+//        //TODO DELETE test archive storage
+//        NotificationService.archiveNotification("sam@gy.com", "com.whatsapp", "Whatsapp", "Test notify","2345678901");
 
         //get archived notification code
         ValueEventListener postListener = new ValueEventListener() {

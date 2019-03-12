@@ -11,8 +11,14 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.prateek.notifyme.MainActivity;
+import com.prateek.notifyme.NotificationListing;
 import com.prateek.notifyme.R;
+import com.prateek.notifyme.SignIn;
+import com.prateek.notifyme.commons.utils;
 import com.prateek.notifyme.elements.SingleListElement;
+import com.prateek.notifyme.service.NotificationService;
 
 import java.util.ArrayList;
 
@@ -48,9 +54,9 @@ public class SingleAppListAdapter extends ArrayAdapter<SingleListElement> {
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
-        SingleListElement listElement = getItem(position);
+        final SingleListElement listElement = getItem(position);
 
-        SingleAppListAdapter.ViewHolder viewHolder;
+        final SingleAppListAdapter.ViewHolder viewHolder;
 
         View result;
 
@@ -82,6 +88,13 @@ public class SingleAppListAdapter extends ArrayAdapter<SingleListElement> {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick archive at: "+position);
+                NotificationService.archiveNotification(SignIn.mAuth.getCurrentUser().getEmail(), listElement.getAppID().toString(),
+                        utils.getApplicationName(listElement.getAppID(), mContext), listElement.getAppName(), listElement.getSortTimeStamp());
+                NotificationService.deleteNotification(listElement.getNotificationID().toString());
+                NotificationListing.notificationList.remove(position);
+                notifyDataSetChanged();
+
+
             }
         });
 
@@ -89,6 +102,9 @@ public class SingleAppListAdapter extends ArrayAdapter<SingleListElement> {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "onClick delete at: "+position);
+                NotificationService.deleteNotification(listElement.getNotificationID().toString());
+                NotificationListing.notificationList.remove(position);
+                notifyDataSetChanged();
             }
         });
 //        viewHolder.tv_counter.setText(listElement.getCounter());

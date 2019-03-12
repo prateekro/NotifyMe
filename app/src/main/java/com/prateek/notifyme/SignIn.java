@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 public class SignIn extends AppCompatActivity {
 
     //Declarations
-    private FirebaseAuth mAuth;
+    public static FirebaseAuth mAuth;
     private Button bt_sign_in, bt_sign_up;
     private EditText et_username, et_password, et_confirm_pass;
     private TextView tv_guest, tv_banner;
