@@ -3,16 +3,20 @@ package com.prateek.notifyme.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.prateek.notifyme.R;
 import com.prateek.notifyme.elements.SingleListElement;
 
 import java.util.ArrayList;
+
+import static com.prateek.notifyme.commons.utils.TAG;
 
 public class SingleAppListAdapter extends ArrayAdapter<SingleListElement> {
 
@@ -25,7 +29,10 @@ public class SingleAppListAdapter extends ArrayAdapter<SingleListElement> {
         TextView tv_time;
         TextView tv_date;
         TextView tv_app_name;
-        TextView tv_counter;
+        ImageView iv_archive;
+        ImageView iv_delete;
+
+//        TextView tv_counter;
         //ImageView info;
     }
 
@@ -39,7 +46,7 @@ public class SingleAppListAdapter extends ArrayAdapter<SingleListElement> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
 
         SingleListElement listElement = getItem(position);
 
@@ -56,7 +63,9 @@ public class SingleAppListAdapter extends ArrayAdapter<SingleListElement> {
             viewHolder.tv_time = (TextView) convertView.findViewById(R.id.tv_time_element_single);
             viewHolder.tv_date = (TextView) convertView.findViewById(R.id.tv_date_element_single);
             viewHolder.tv_app_name = (TextView) convertView.findViewById(R.id.tv_app_group_single);
-            viewHolder.tv_counter = (TextView) convertView.findViewById(R.id.tv_counter_notification_single);
+            viewHolder.iv_archive = (ImageView) convertView.findViewById(R.id.iv_single_archive);
+            viewHolder.iv_delete = (ImageView) convertView.findViewById(R.id.iv_single_delete);
+//            viewHolder.tv_counter = (TextView) convertView.findViewById(R.id.tv_counter_notification_single);
 
             result = convertView;
 
@@ -69,7 +78,20 @@ public class SingleAppListAdapter extends ArrayAdapter<SingleListElement> {
         viewHolder.tv_app_name.setText(listElement.getAppName());
         viewHolder.tv_date.setText(listElement.getDate());
         viewHolder.tv_time.setText(listElement.getTime());
-        viewHolder.tv_counter.setText(listElement.getCounter());
+        viewHolder.iv_archive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick archive at: "+position);
+            }
+        });
+
+        viewHolder.iv_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "onClick delete at: "+position);
+            }
+        });
+//        viewHolder.tv_counter.setText(listElement.getCounter());
 
         return result;
     }
