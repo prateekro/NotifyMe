@@ -50,7 +50,7 @@ public class NotificationListing extends AppCompatActivity {
     TextView tv_appname;
     ImageView iv_appIcon;
     CardView cv_appBack;
-    private ArrayList<SingleListElement> notificationList;
+    public static ArrayList<SingleListElement> notificationList;
     private SingleAppListAdapter mAppListElementAdapter;
     private ListView lv_listing;
     Timer timerHandler;
@@ -149,7 +149,7 @@ public class NotificationListing extends AppCompatActivity {
         }
     };
 
-    private void updateListOfNotifications() {
+    public void updateListOfNotifications() {
         NotificationService notificationService = new NotificationService(getApplicationContext());
         HashMap<String, ArrayList<String>> appAllNotifications = notificationService.getAppNotifications(pageTitle);
         Set keySetAppID = appAllNotifications.keySet();
@@ -161,7 +161,11 @@ public class NotificationListing extends AppCompatActivity {
                 notificationList.clear();
             }
             i++;
-            Log.d(utils.TAG, "DATA OF KEY:: TEXT: "+appAllNotifications.get(appID).get(0) + " ::TimeStamp: "+ appAllNotifications.get(appID).get(1));
+            //txt time pkg
+            Log.d(utils.TAG, "DATA OF KEY:: TEXT: "+appAllNotifications.get(appID).get(0)
+                    + " ::TimeStamp: "+ appAllNotifications.get(appID).get(1)
+                    + " ::APPID: "+ appAllNotifications.get(appID).get(2)
+            );
             Date dt = utils.parseToDateFromString(appAllNotifications.get(appID).get(1));
 
             if (appAllNotifications.get(appID).get(0).matches(" *")
@@ -179,7 +183,9 @@ public class NotificationListing extends AppCompatActivity {
                             utils.getTimeToDate(dt), //Gets only the date
                             appAllNotifications.get(appID).get(0), //Puts the extra text from notification
                             " ",
-                            dt.toString() //Gets only the timestamp
+                            dt.toString(),
+                            appAllNotifications.get(appID).get(2).toString(), //Gets appID
+                            Integer.parseInt(appID.toString())
                     ) //Counter isn't required here.
             );
 

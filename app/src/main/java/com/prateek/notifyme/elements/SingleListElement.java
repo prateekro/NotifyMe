@@ -8,13 +8,17 @@ public class SingleListElement {
     private String appName;
     private String counter;
     private String sortTimeStamp;
+    private String appID;
+    private Integer notificationID;
 
-    public SingleListElement(String time, String date, String appName, String counter, String sortTimeStamp){
+    public SingleListElement(String time, String date, String appName, String counter, String sortTimeStamp, String appID, Integer notificationID){
         this.time = time;
         this.date = date;
         this.appName = appName;
         this.counter = counter;
         this.sortTimeStamp = sortTimeStamp;
+        this.appID = appID;
+        this.notificationID = notificationID;
     }
 
     public String getAppName() {
@@ -33,6 +37,14 @@ public class SingleListElement {
 
     public String getSortTimeStamp() { return sortTimeStamp; }
 
+    public String getAppID() {
+        return appID;
+    }
+
+    public Integer getNotificationID() {
+        return notificationID;
+    }
+
     public void setAppName(String appName) {
         this.appName = appName;
     }
@@ -50,6 +62,14 @@ public class SingleListElement {
     }
 
     public void setSortTimeStamp(String sortTimeStamp) { this.sortTimeStamp = sortTimeStamp; }
+
+    public void setAppID(String appID) {
+        this.appID = appID;
+    }
+
+    public void setNotificationID(Integer notificationID) {
+        this.notificationID = notificationID;
+    }
 
     /*Comparator for sorting the list by roll no*/
     public static Comparator<SingleListElement> lsTime = new Comparator<SingleListElement>() {
