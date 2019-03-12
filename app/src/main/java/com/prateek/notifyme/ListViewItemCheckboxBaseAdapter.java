@@ -128,7 +128,7 @@ public class ListViewItemCheckboxBaseAdapter extends BaseAdapter {
             viewHolder.getPriority().check(R.id.low);
         } else if(listViewItemDto.getPriority() == Priority.MEDIUM) {
             viewHolder.getPriority().check(R.id.medium);
-        } else {
+        } else if(listViewItemDto.getPriority() == Priority.HIGH){
             viewHolder.getPriority().check(R.id.high);
         }
 
