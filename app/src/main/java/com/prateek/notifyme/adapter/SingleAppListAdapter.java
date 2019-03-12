@@ -30,7 +30,6 @@ public class SingleAppListAdapter extends ArrayAdapter<SingleListElement> {
     private int layoutResource;
     private ArrayList<SingleListElement> appList;
     private Context mContext;
-
     private static class ViewHolder {
         TextView tv_time;
         TextView tv_date;

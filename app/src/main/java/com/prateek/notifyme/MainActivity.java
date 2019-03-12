@@ -56,10 +56,6 @@ public class MainActivity extends AppCompatActivity {
     Timer timerHandler;
     TimerTask timedNotificationUpdate;
     private static final int DEFAULT_THRESHOLD = 128;
-
-
-    private DatabaseReference mPostReference;
-    private ValueEventListener mPostListener;
     private Priority priority = Priority.HIGH;
 
     @Override
@@ -214,34 +210,6 @@ public class MainActivity extends AppCompatActivity {
 //
 //            }
 //        }]]['
-
-
-//        //TODO DELETE test archive storage
-//        NotificationService.archiveNotification("sam@gy.com", "com.whatsapp", "Whatsapp", "Test notify","2345678901");
-
-        //get archived notification code
-        ValueEventListener postListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // Get Post object and use the values to update the UI
-//                NotificationBean notification = dataSnapshot.getValue(NotificationBean.class);
-//                HashMap map = dataSnapshot.getValue(HashMap.class);
-                Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                System.out.println("### YeP! ");
-                for (Object key : map.keySet()) {
-                    System.out.println("//// "+map.get(key));
-                    // Set data in View list
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // Getting Post failed, log a message
-                System.out.println("^^^ ERROR: "+ databaseError.toString());
-            }
-        };
-        mPostReference.addValueEventListener(postListener);
-        mPostListener = postListener;
     }
 
     @Override
