@@ -26,7 +26,7 @@ public class SignIn extends AppCompatActivity {
     public static FirebaseAuth mAuth;
     private Button bt_sign_in, bt_sign_up;
     private EditText et_username, et_password, et_confirm_pass;
-    private TextView tv_guest, tv_banner;
+    private TextView tv_banner;
     private static final String TAG = "DebugMsg";
 
     @Override
@@ -52,7 +52,6 @@ public class SignIn extends AppCompatActivity {
         et_password = (EditText) findViewById(R.id.et_password);
         et_confirm_pass = (EditText) findViewById(R.id.et_confirm_pass);
 
-        tv_guest = (TextView) findViewById(R.id.tv_guest_signin);
         tv_banner = (TextView) findViewById(R.id.tv_banner);
 
         tv_banner.setText(R.string.sign_in);
@@ -78,12 +77,7 @@ public class SignIn extends AppCompatActivity {
                         }
                         break;
                     }
-                    case  R.id.tv_guest_signin: {
-                        // goto MainActivity
 
-//                        startActivity(new Intent(SignIn.this, MainActivity.class));
-                        break;
-                    }
 
                     case R.id.bt_signup: {
                         // change UI to SignUp
@@ -104,8 +98,6 @@ public class SignIn extends AppCompatActivity {
                 }
             }
         };
-
-        tv_guest.setOnClickListener(btListener);
 
         bt_sign_in.setOnClickListener(btListener);
         bt_sign_up.setOnClickListener(btListener);
