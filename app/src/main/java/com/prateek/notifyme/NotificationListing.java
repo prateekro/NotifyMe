@@ -1,5 +1,6 @@
 package com.prateek.notifyme;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -67,6 +68,8 @@ public class NotificationListing extends AppCompatActivity {
         Intent intent = getIntent();
         pageTitle = intent.getStringExtra("TITLE");
         pagePKG = intent.getStringExtra("PKG");
+        System.out.println("$$$$ PKG NAME:");
+        System.out.println(pagePKG);
 
         notificationList = new ArrayList<SingleListElement>();
         lv_listing = (ListView) findViewById(R.id.lv_listing);
@@ -122,7 +125,7 @@ public class NotificationListing extends AppCompatActivity {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Log.d(TAG, "onItemLongClick: LONG CLICKED at: "+position);
+                Log.d(TAG, "### onItemLongClick: LONG CLICKED at: "+position);
                 return false;
             }
 
@@ -134,6 +137,13 @@ public class NotificationListing extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Log.d(TAG, "onItemClick: CLICKED at: " + position);
+                try {
+                    Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pagePKG);
+                    if (launchIntent != null)
+                        startActivity(launchIntent);
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
 
