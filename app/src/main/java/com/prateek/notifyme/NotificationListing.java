@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -142,6 +143,8 @@ public class NotificationListing extends AppCompatActivity {
                     Intent launchIntent = getPackageManager().getLaunchIntentForPackage(pagePKG);
                     if (launchIntent != null)
                         startActivity(launchIntent);
+                    else
+                        Toast.makeText(NotificationListing.this, "Target App not found", Toast.LENGTH_SHORT).show();
                 } catch(Exception e) {
                     e.printStackTrace();
                 }
