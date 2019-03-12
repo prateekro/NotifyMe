@@ -4,6 +4,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.prateek.notifyme.MainActivity;
 import com.prateek.notifyme.beans.ApplicationBean;
 import com.prateek.notifyme.beans.NotificationBean;
@@ -148,6 +153,32 @@ public class NotificationService {
             }
             boolean success = mDatabaseHelper.toggleUpdateApplicationDB(appName,isEnabled);
         }
+    }
+
+    public void archiveNotification() {
+        // Write a message to the database
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("notifications");
+//        myRef.setValue("Hello, World!");
+//        myRef.setValue("Check instance");
+        myRef.child("user1").child("txt").setValue("text 2");
+
+        // Read from the database
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+//                String value = dataSnapshot.getValue(String.class);
+//                System.out.println("Value is: " + value);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                System.out.println("Failed to read value."+ error.toException());
+            }
+        });
     }
 
 }
