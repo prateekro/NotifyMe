@@ -17,6 +17,13 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.prateek.notifyme.adapter.AppListElementAdapter;
 import com.prateek.notifyme.adapter.SingleAppListAdapter;
 import com.prateek.notifyme.commons.utils;
 import com.prateek.notifyme.elements.ListElement;
@@ -44,7 +51,7 @@ public class NotificationListing extends AppCompatActivity {
     TextView tv_appname;
     ImageView iv_appIcon;
     CardView cv_appBack;
-    private ArrayList<SingleListElement> notificationList;
+    public static ArrayList<SingleListElement> notificationList;
     private SingleAppListAdapter mAppListElementAdapter;
     private ListView lv_listing;
     Timer timerHandler;
@@ -66,6 +73,17 @@ public class NotificationListing extends AppCompatActivity {
         tv_appname = (TextView) findViewById(R.id.tv_listing);
         iv_appIcon = (ImageView) findViewById(R.id.iv_listing);
         cv_appBack = (CardView) findViewById(R.id.cv_appBack);
+
+        //test code
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("notifications");
+//        myRef.setValue("Hello, World!");
+//        myRef.setValue("Check instance");
+//        myRef.child("user1").child("txt").setValue("text 2");
+        String txt = String.valueOf(myRef.child("user1").child("instagram").child("1").child("txt"));
+        System.out.println("*****");
+        System.out.println(txt);
+
         clearButton = findViewById(R.id.clearId);
     }
 
@@ -75,9 +93,9 @@ public class NotificationListing extends AppCompatActivity {
 
         tv_appname.setText(pageTitle);
 
-        Log.d(TAG, "APP COLOR$$: "+getAppColor(NotificationListing.this, pagePKG));
+        Log.d(TAG, "APP COLOR$$: " + getAppColor(NotificationListing.this, pagePKG));
         int appColor = getAppColor(NotificationListing.this, pagePKG);
-        if (appColor != -1){
+        if (appColor != -1) {
             tv_appname.setTextColor(appColor);
         }
 
@@ -99,11 +117,23 @@ public class NotificationListing extends AppCompatActivity {
 
         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.rv_layout_animation);
         lv_listing.setLayoutAnimation(controller);
+
+        AdapterView.OnItemLongClickListener itemClickListener = new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Log.d(TAG, "onItemLongClick: LONG CLICKED at: "+position);
+                return false;
+            }
+
+        };
+
+        lv_listing.setOnItemLongClickListener(itemClickListener);
+
         lv_listing.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
-
+                Log.d(TAG, "onItemClick: CLICKED at: " + position);
             }
         });
 
@@ -120,7 +150,6 @@ public class NotificationListing extends AppCompatActivity {
 
     }
 
-
     private void TimerMethod() {
         //This method is called directly by the timer and runs in the same thread as the timer.
         this.runOnUiThread(Timer_Tick);
@@ -135,7 +164,7 @@ public class NotificationListing extends AppCompatActivity {
         }
     };
 
-    private void updateListOfNotifications() {
+    public void updateListOfNotifications() {
         NotificationService notificationService = new NotificationService(getApplicationContext());
         HashMap<String, ArrayList<String>> appAllNotifications = notificationService.getAppNotifications(pageTitle);
         Set keySetAppID = appAllNotifications.keySet();
@@ -147,7 +176,11 @@ public class NotificationListing extends AppCompatActivity {
                 notificationList.clear();
             }
             i++;
-            Log.d(utils.TAG, "DATA OF KEY:: TEXT: "+appAllNotifications.get(appID).get(0) + " ::TimeStamp: "+ appAllNotifications.get(appID).get(1));
+            //txt time pkg
+            Log.d(utils.TAG, "DATA OF KEY:: TEXT: "+appAllNotifications.get(appID).get(0)
+                    + " ::TimeStamp: "+ appAllNotifications.get(appID).get(1)
+                    + " ::APPID: "+ appAllNotifications.get(appID).get(2)
+            );
             Date dt = utils.parseToDateFromString(appAllNotifications.get(appID).get(1));
 
             if (appAllNotifications.get(appID).get(0).matches(" *")
@@ -165,7 +198,9 @@ public class NotificationListing extends AppCompatActivity {
                             utils.getTimeToDate(dt), //Gets only the date
                             appAllNotifications.get(appID).get(0), //Puts the extra text from notification
                             " ",
-                            dt.toString() //Gets only the timestamp
+                            dt.toString(),
+                            appAllNotifications.get(appID).get(2).toString(), //Gets appID
+                            Integer.parseInt(appID.toString())
                     ) //Counter isn't required here.
             );
 
