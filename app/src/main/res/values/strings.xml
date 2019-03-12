@@ -5,7 +5,7 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="login_as_guest">Login as guest</string>
+    <string name="login_as_guest">LOGIN AS GUEST</string>
     <string name="setting">Setting</string>
 
     <string name="HIGH">HIGH</string>
