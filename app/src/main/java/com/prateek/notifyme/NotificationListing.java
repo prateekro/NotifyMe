@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -48,6 +49,7 @@ public class NotificationListing extends AppCompatActivity {
     private ListView lv_listing;
     Timer timerHandler;
     TimerTask timedNotificationUpdate;
+    Button clearButton;
 
 
     @Override
@@ -64,6 +66,7 @@ public class NotificationListing extends AppCompatActivity {
         tv_appname = (TextView) findViewById(R.id.tv_listing);
         iv_appIcon = (ImageView) findViewById(R.id.iv_listing);
         cv_appBack = (CardView) findViewById(R.id.cv_appBack);
+        clearButton = findViewById(R.id.clearId);
     }
 
     @Override
@@ -101,6 +104,17 @@ public class NotificationListing extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
 
+            }
+        });
+
+        final NotificationService notificationService = new NotificationService(getApplicationContext());
+        clearButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                notificationList.clear();
+                notificationService.clearAllNotifications(pageTitle);
+                mAppListElementAdapter.notifyDataSetInvalidated();
+                mAppListElementAdapter.notifyDataSetChanged();
             }
         });
 
@@ -194,6 +208,8 @@ public class NotificationListing extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Log.d(TAG, "onBackPressed: pressed");
+        new NotificationService(getApplicationContext()).resetCounter(pageTitle); //reset the counter
         finish();
         overridePendingTransition(R.anim.slide_to_right, R.anim.slide_from_left);
     }

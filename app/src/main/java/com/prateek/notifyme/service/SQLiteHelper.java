@@ -72,7 +72,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 APPLICATION_COL1+ " TEXT PRIMARY KEY, "+
                 APPLICATION_COL2+ " TEXT, "+
                 APPLICATION_COL3+ " TEXT, "+
-                APPLICATION_COL4+ " INTEGER, "+
+                APPLICATION_COL4+ " TEXT, "+
                 APPLICATION_COL5+ " TEXT); ";
 //                APPLICATION_COL6+ "TEXT, "+
 //                APPLICATION_COL7+ "TEXT, "+
@@ -135,17 +135,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     }
     // updates the APPLICATION_TABLE_NAME with incremented unread counter
-    public boolean updateAppTable(String appName, int unreadNotificationsCount){
+    public boolean updateAppTable(String appName, Integer unreadNotificationsCount){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(APPLICATION_COL4, unreadNotificationsCount);
+        values.put(APPLICATION_COL4, unreadNotificationsCount+1);
         long result = db.update(APPLICATION_TABLE_NAME, values, APPLICATION_COL1 +" = ?", new String[]{appName});
         if (result <=0)
             return false;
         else
             return true;
-
-
     }
 
     public Cursor getUnreadNotificationCount(String appId){
@@ -157,7 +155,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     // Fetch attributes like priority, category to be inserted into the APPLICATION_TABLE_NAME
-    public boolean insertApp(String appId, String appName, String enabled, int unreadNotifications, String priority){
+    public boolean insertApp(String appId, String appName, String enabled, String unreadNotifications, String priority){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(APPLICATION_COL1, appId);
@@ -229,6 +227,17 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         else
             return true;
 
+    }
+
+    public boolean resetApp(String appName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(APPLICATION_COL4, 0);
+        long result = db.update(APPLICATION_TABLE_NAME, values, APPLICATION_COL2 +" = ?", new String[]{appName});
+        if (result <=0)
+            return false;
+        else
+            return true;
     }
 
 
