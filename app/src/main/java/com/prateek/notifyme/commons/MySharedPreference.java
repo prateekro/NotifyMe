@@ -14,6 +14,7 @@ import java.util.Map;
 public class MySharedPreference {
 
     public static final String PREF_NAME = "NOTIFYME_PREF";
+    public static final String DND_FLAG = "DND_FLAG";
 
     public static SharedPreferences mSharedPreferences;
     public static SharedPreferences.Editor mEditor;

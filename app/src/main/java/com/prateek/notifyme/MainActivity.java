@@ -2,6 +2,8 @@ package com.prateek.notifyme;
 
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -56,8 +58,9 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fabMenu;
     Timer timerHandler;
     TimerTask timedNotificationUpdate;
-    private static final int DEFAULT_THRESHOLD = 128;
     private Priority priority = Priority.HIGH;
+    Button high, medium, low;
+    NotificationService notificationService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,61 +99,34 @@ public class MainActivity extends AppCompatActivity {
 //        timerHandler = new Timer();
 
 //        timerHandler.schedule(timedNotificationUpdate, 0, 3000);
-        final NotificationService notificationService = new NotificationService(getApplicationContext());
+        low = (Button) findViewById(R.id.buttonLow);
+        medium = (Button) findViewById(R.id.buttonMedium);
+        high = (Button) findViewById(R.id.buttonHigh);
+        fabMenu = (FloatingActionButton) findViewById(R.id.fabMenu);
 
-        Button high = findViewById(R.id.buttonHigh);
-        high.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                    appList.clear();
-                for(Map.Entry<String, ArrayList<String>> entry : notificationService.getAllNotifications().entrySet()) {
-                   if (Priority.HIGH == Priority.valueOf(entry.getValue().get(2).toString()) && "true".equalsIgnoreCase(entry.getValue().get(3).toString())) {
-                       appList.add(new ListElement(" ", " ", entry.getKey().toString(), entry.getValue().get(0).toString(), entry.getValue().get(1).toString()));
-                   }
-                }
-                priority = Priority.HIGH;
-                Collections.sort(appList, ListElement.lsCounter);
-                applistadapter.notifyDataSetInvalidated();
-                applistadapter.notifyDataSetChanged();
-            }
-        });
 
-        Button medium = findViewById(R.id.buttonMedium);
+        setButtonStyle(priority);
+    }
 
-        medium.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                appList.clear();
-                for(Map.Entry<String, ArrayList<String>> entry : notificationService.getAllNotifications().entrySet()) {
-                    if (Priority.MEDIUM == Priority.valueOf(entry.getValue().get(2).toString()) && "true".equalsIgnoreCase(entry.getValue().get(3).toString())) {
-                        appList.add(new ListElement(" ", " ", entry.getKey().toString(), entry.getValue().get(0).toString(), entry.getValue().get(1).toString()));
-                    }
+    private void setButtonStyle(Priority priority) {
 
-                }
-                priority = Priority.MEDIUM;
-                Collections.sort(appList, ListElement.lsCounter);
-                applistadapter.notifyDataSetInvalidated();
-                applistadapter.notifyDataSetChanged();
-            }
-        });
-
-        Button low = findViewById(R.id.buttonLow);
-        low.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                appList.clear();
-                for(Map.Entry<String, ArrayList<String>> entry : notificationService.getAllNotifications().entrySet()) {
-                    if (Priority.LOW == Priority.valueOf(entry.getValue().get(2).toString()) && "true".equalsIgnoreCase(entry.getValue().get(3).toString())) {
-                        appList.add(new ListElement(" ", " ", entry.getKey().toString(), entry.getValue().get(0).toString(), entry.getValue().get(1).toString()));
-                    }
-
-                }
-                priority = Priority.LOW;
-                Collections.sort(appList, ListElement.lsCounter);
-                applistadapter.notifyDataSetInvalidated();
-                applistadapter.notifyDataSetChanged();
-            }
-        });
+        switch (priority){
+            case LOW:
+                low.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.darkYellow));
+                medium.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.purple));
+                high.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.purple));
+                break;
+            case MEDIUM:
+                low.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.purple));
+                medium.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.darkYellow));
+                high.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.purple));
+                break;
+            case HIGH:
+                low.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.purple));
+                medium.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.purple));
+                high.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.darkYellow));
+                break;
+        }
     }
 
     private void TimerMethod() {
@@ -174,7 +150,60 @@ public class MainActivity extends AppCompatActivity {
 //        Button permitButton = (Button) findViewById(R.id.click_permit);
 //        Button notifyButton = (Button) findViewById(R.id.btn_notify);
 
-        fabMenu = (FloatingActionButton) findViewById(R.id.fabMenu);
+        notificationService = new NotificationService(getApplicationContext());
+
+        high.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                appList.clear();
+                for(Map.Entry<String, ArrayList<String>> entry : notificationService.getAllNotifications().entrySet()) {
+                   if (Priority.HIGH == Priority.valueOf(entry.getValue().get(2).toString()) && "true".equalsIgnoreCase(entry.getValue().get(3).toString())) {
+                       appList.add(new ListElement(" ", " ", entry.getKey().toString(), entry.getValue().get(0).toString(), entry.getValue().get(1).toString()));
+                   }
+                }
+                priority = Priority.HIGH;
+                setButtonStyle(priority);
+                Collections.sort(appList, ListElement.lsCounter);
+                applistadapter.notifyDataSetInvalidated();
+                applistadapter.notifyDataSetChanged();
+            }
+        });
+
+        medium.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                appList.clear();
+                for(Map.Entry<String, ArrayList<String>> entry : notificationService.getAllNotifications().entrySet()) {
+                    if (Priority.MEDIUM == Priority.valueOf(entry.getValue().get(2).toString()) && "true".equalsIgnoreCase(entry.getValue().get(3).toString())) {
+                        appList.add(new ListElement(" ", " ", entry.getKey().toString(), entry.getValue().get(0).toString(), entry.getValue().get(1).toString()));
+                    }
+
+                }
+                priority = Priority.MEDIUM;
+                setButtonStyle(priority);
+                Collections.sort(appList, ListElement.lsCounter);
+                applistadapter.notifyDataSetInvalidated();
+                applistadapter.notifyDataSetChanged();
+            }
+        });
+
+        low.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                appList.clear();
+                for(Map.Entry<String, ArrayList<String>> entry : notificationService.getAllNotifications().entrySet()) {
+                    if (Priority.LOW == Priority.valueOf(entry.getValue().get(2).toString()) && "true".equalsIgnoreCase(entry.getValue().get(3).toString())) {
+                        appList.add(new ListElement(" ", " ", entry.getKey().toString(), entry.getValue().get(0).toString(), entry.getValue().get(1).toString()));
+                    }
+
+                }
+                priority = Priority.LOW;
+                setButtonStyle(priority);
+                Collections.sort(appList, ListElement.lsCounter);
+                applistadapter.notifyDataSetInvalidated();
+                applistadapter.notifyDataSetChanged();
+            }
+        });
 
         applistadapter = new AppListElementAdapter(this, R.layout.list_element, appList);
         lv_app.setAdapter(applistadapter);
