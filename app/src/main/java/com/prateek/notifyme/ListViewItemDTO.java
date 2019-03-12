@@ -8,6 +8,14 @@ public class ListViewItemDTO {
 
     private String itemText = "";
 
+    private Priority priority;
+
+    public ListViewItemDTO(boolean checked, String itemText, Priority priority) {
+        this.checked = checked;
+        this.itemText = itemText;
+        this.priority = priority;
+    }
+
     public boolean isChecked() {
         return checked;
     }
@@ -22,5 +30,13 @@ public class ListViewItemDTO {
 
     public void setItemText(String itemText) {
         this.itemText = itemText;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
     }
 }

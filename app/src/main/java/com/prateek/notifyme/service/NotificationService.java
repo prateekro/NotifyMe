@@ -4,19 +4,23 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.prateek.notifyme.ListViewItemDTO;
+import com.prateek.notifyme.Priority;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.prateek.notifyme.MainActivity;
+import com.prateek.notifyme.ListViewItemDTO;
+import com.prateek.notifyme.Priority;
 import com.prateek.notifyme.beans.ApplicationBean;
 import com.prateek.notifyme.beans.NotificationBean;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Set;
+import java.util.List;
 
 import static com.prateek.notifyme.commons.utils.TAG;
 
@@ -65,17 +69,12 @@ public class NotificationService {
         //boolean variable for checking the success of events
         boolean isUpdated, isAppInserted, isNotificationSuccess ;
         isNotificationSuccess = mDatabaseHelper.saveNotificationDB(appName, time, text, appId);
-        if (isNotificationSuccess){
-            Log.d(TAG, "saveNotification BOOLEAN: "+isNotificationSuccess);
-        }else {
-            Log.d(TAG, "saveNotification BOOLEAN: "+isNotificationSuccess);
-        }
         if(mDatabaseHelper.isAppPresent(appId)){
             Cursor cur = mDatabaseHelper.getUnreadNotificationCount(appId);
 
             while(cur.moveToNext()){
-
                 isUpdated = mDatabaseHelper.updateAppTable(appId,Integer.parseInt(cur.getString(0)));
+                // isUpdated = mDatabaseHelper.updateAppTable(appName,Integer.parseInt(cur.getString(0)));
                 if (isUpdated ){
                     Log.d(TAG, "saveNotification: OK #");
                 }else{
@@ -86,8 +85,8 @@ public class NotificationService {
         }
         else{
 
-            isAppInserted = mDatabaseHelper.insertApp(appId, appName, enabled,
-                    "1");
+            isAppInserted = mDatabaseHelper.insertApp(appId, appName, enabled,"1", Priority.HIGH.name());
+
             if (isAppInserted){
                 Log.d(TAG, "saveNotification:@@ OK #");
             }else{
@@ -135,9 +134,10 @@ public class NotificationService {
             ArrayList <String> dataX = new ArrayList<String>();
             String app_nm = String.valueOf(data.getInt(1));
             String packg = data.getString(2);
+            String priority = data.getString(3);
             dataX.add(app_nm);
             dataX.add(packg);
-
+            dataX.add(priority);
             listData.put(data.getString(0), dataX); //appname unread package
         }
         return listData;
@@ -145,7 +145,7 @@ public class NotificationService {
 
     //on app tap from dashboard, the unread counter should reset
     public void resetCounter(String appName){
-
+        mDatabaseHelper.resetApp(appName);
     }
 
     //delete a particular notification
@@ -154,8 +154,8 @@ public class NotificationService {
     }
 
     //delete all notifications of a particular app
-    public void clearAllNotifications(String appId){
-        boolean isCleared = mDatabaseHelper.clearAllNotificationsDB(appId);
+    public void clearAllNotifications(String appName){
+        boolean isCleared = mDatabaseHelper.clearAllNotificationsDB(appName);
     }
 
     //delete a particular notification
@@ -163,16 +163,25 @@ public class NotificationService {
 //
 //    }
 
-    public void toggleApplication(String appName){
+    public void toggleApplication(String appName, boolean status){
+        Log.d(TAG, "first enter toggleApplication: "+appName);
         Cursor cur = mDatabaseHelper.getEnabledDB(appName);
+        Log.d(TAG, "after curr toggleApplication: "+appName);
         while(cur.moveToNext()){
             String isEnabled = cur.getString(0);
+
+            if(isEnabled.equalsIgnoreCase(String.valueOf(status))) {
+                return;
+            }
+            System.out.print(isEnabled);
+            Log.d(TAG, "toggleApplication: "+isEnabled);
             if(isEnabled.equalsIgnoreCase("true")){
                 isEnabled="false";
             }
             else{
                 isEnabled="true";
             }
+            Log.d(TAG, "EXIT enter toggleApplication: "+isEnabled);
             boolean success = mDatabaseHelper.toggleUpdateApplicationDB(appName,isEnabled);
         }
     }
@@ -208,6 +217,24 @@ public class NotificationService {
 //                System.out.println("Failed to read value."+ error.toException());
 //            }
 //        });
+    }
+
+    public List<ListViewItemDTO> getEnableStatusOfApps() {
+        Cursor cursor = mDatabaseHelper.getEnableStatusForAppsDB();
+        List<ListViewItemDTO> result = new ArrayList<>();
+        while(cursor.moveToNext()) {
+            Log.d(TAG, "getEnableStatusOfApps: "+cursor.getString(1) + cursor.getString(0));
+            result.add(mapToDTO(cursor.getString(0), Boolean.valueOf(cursor.getString(1)), Priority.valueOf(cursor.getString(2))));
+        }
+        return result;
+    }
+
+    public ListViewItemDTO mapToDTO(String name, Boolean status, Priority priority) {
+        return new ListViewItemDTO(status, name, priority);
+    }
+
+    public void setAppPriority(String appName, Enum priority){
+        mDatabaseHelper.setAppPriorityDB(appName,priority);
     }
 
 }

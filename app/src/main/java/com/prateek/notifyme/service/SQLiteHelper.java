@@ -5,8 +5,11 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.util.Log;
 
+import com.prateek.notifyme.Priority;
 import com.prateek.notifyme.R;
 import com.prateek.notifyme.commons.utils;
 
@@ -38,12 +41,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 //    private static final String APPLICATION_COL5= "category";
 //    private static final String APPLICATION_COL6= "totalNotifications";
     private static final String APPLICATION_COL4= "unreadNotifications";
+    private static final String APPLICATION_COL5= "priority";
 //    private static final String APPLICATION_COL8= "lastNotificationTimestamp";
 //    prZivate static final String APPLICATION_COL9= "readTimestamp";
 //    private static final String APPLICATION_COL10= "userId";
 
     public SQLiteHelper(Context context) {
-        super(context, String.valueOf(R.string.app_name), null, 3);
+        super(context, String.valueOf(R.string.app_name), null, 6);
     }
 
     @Override
@@ -75,8 +79,8 @@ public class SQLiteHelper extends SQLiteOpenHelper {
                 APPLICATION_COL1+ " TEXT PRIMARY KEY, "+
                 APPLICATION_COL2+ " TEXT, "+
                 APPLICATION_COL3+ " TEXT, "+
-                APPLICATION_COL4+ " TEXT )";
-//                APPLICATION_COL5+ "TEXT, "+
+                APPLICATION_COL4+ " TEXT, "+
+                APPLICATION_COL5+ " TEXT); ";
 //                APPLICATION_COL6+ "TEXT, "+
 //                APPLICATION_COL7+ "TEXT, "+
 //                APPLICATION_COL8+ "DATETIME, "+
@@ -98,7 +102,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     public Cursor getApplicationListingData() {
         SQLiteDatabase db = this.getWritableDatabase();
-        String query = "SELECT "+ APPLICATION_COL2 +", "+ APPLICATION_COL4 +", "+ APPLICATION_COL1 +" FROM "+APPLICATION_TABLE_NAME;
+        String query = "SELECT "+ APPLICATION_COL2 +", "+ APPLICATION_COL4 +", "+ APPLICATION_COL1 +", "+ APPLICATION_COL5 +" FROM "+APPLICATION_TABLE_NAME;
         Cursor data = db.rawQuery(query, null);
         return data;
     }
@@ -141,17 +145,15 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     }
     // updates the APPLICATION_TABLE_NAME with incremented unread counter
-    public boolean updateAppTable(String appId, int unreadNotificationsCount){
+    public boolean updateAppTable(String appName, Integer unreadNotificationsCount){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(APPLICATION_COL4, unreadNotificationsCount+1);
-        long result = db.update(APPLICATION_TABLE_NAME, values, APPLICATION_COL1 +" = ?", new String[]{appId});
+        long result = db.update(APPLICATION_TABLE_NAME, values, APPLICATION_COL1 +" = ?", new String[]{appName});
         if (result <=0)
             return false;
         else
             return true;
-
-
     }
 
     public Cursor getUnreadNotificationCount(String appId){
@@ -163,7 +165,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     }
 
     // Fetch attributes like priority, category to be inserted into the APPLICATION_TABLE_NAME
-    public boolean insertApp(String appId, String appName, String enabled, String unreadNotifications){
+    public boolean insertApp(String appId, String appName, String enabled, String unreadNotifications, String priority){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(APPLICATION_COL1, appId);
@@ -173,7 +175,7 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 //        values.put(APPLICATION_COL5, category);
 //        values.put(APPLICATION_COL6, totalNotifications);
         values.put(APPLICATION_COL4, unreadNotifications);
-//        values.put(APPLICATION_COL8, lastNotificationTimestamp);
+        values.put(APPLICATION_COL5, priority);
 //        values.put(APPLICATION_COL9, readTimestamp);
 //        values.put(APPLICATION_COL10, userId);
         long result = db.insert(APPLICATION_TABLE_NAME, null, values);
@@ -205,22 +207,47 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     public Cursor getEnabledDB(String appName){
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor checkEnabledCursor = db.rawQuery("select "+APPLICATION_COL3 +" from " + APPLICATION_TABLE_NAME+" where "
-                +APPLICATION_COL1+" = ?" ,new String[]{appName});
-
+                +APPLICATION_COL2+" = ?" ,new String[]{appName});
         return checkEnabledCursor;
-
     }
 
     public boolean toggleUpdateApplicationDB(String appName, String toggle){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(APPLICATION_COL3, toggle);
-        long result = db.update(APPLICATION_TABLE_NAME, values, APPLICATION_COL1 +" = ?", new String[]{appName});
+        long result = db.update(APPLICATION_TABLE_NAME, values, APPLICATION_COL2 +" = ?", new String[]{appName});
+        if (result <=0)
+            return false;
+        else
+            return true;
+    }
+
+    public Cursor getEnableStatusForAppsDB(){
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.rawQuery("select "+APPLICATION_COL2 + ","+APPLICATION_COL3+","+APPLICATION_COL5+" from " + APPLICATION_TABLE_NAME, null);
+    }
+
+    public boolean setAppPriorityDB(String appName, Enum priority){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(APPLICATION_COL5, priority.name());
+        long result = db.update(APPLICATION_TABLE_NAME, values, APPLICATION_COL2 +" = ?", new String[]{appName});
         if (result <=0)
             return false;
         else
             return true;
 
+    }
+
+    public boolean resetApp(String appName){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(APPLICATION_COL4, 0);
+        long result = db.update(APPLICATION_TABLE_NAME, values, APPLICATION_COL2 +" = ?", new String[]{appName});
+        if (result <=0)
+            return false;
+        else
+            return true;
     }
 
 
