@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.graphics.Palette;
@@ -57,7 +58,7 @@ public class NotificationListing extends AppCompatActivity {
     private ListView lv_listing;
     Timer timerHandler;
     TimerTask timedNotificationUpdate;
-    Button clearButton;
+    FloatingActionButton clearButton;
 
 
     @Override
@@ -76,6 +77,7 @@ public class NotificationListing extends AppCompatActivity {
         tv_appname = (TextView) findViewById(R.id.tv_listing);
         iv_appIcon = (ImageView) findViewById(R.id.iv_listing);
         cv_appBack = (CardView) findViewById(R.id.cv_appBack);
+        clearButton = (FloatingActionButton) findViewById(R.id.clearId);
 
         //test code
         FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -87,7 +89,6 @@ public class NotificationListing extends AppCompatActivity {
         System.out.println("*****");
         System.out.println(txt);
 
-        clearButton = findViewById(R.id.clearId);
     }
 
     @Override
