@@ -180,13 +180,13 @@ public class NotificationService {
         List<ListViewItemDTO> result = new ArrayList<>();
         while(cursor.moveToNext()) {
             Log.d(TAG, "getEnableStatusOfApps: "+cursor.getString(1) + cursor.getString(0));
-            result.add(mapToDTO(cursor.getString(0), Boolean.valueOf(cursor.getString(1))));
+            result.add(mapToDTO(cursor.getString(0), Boolean.valueOf(cursor.getString(1)), Priority.valueOf(cursor.getString(2))));
         }
         return result;
     }
 
-    public ListViewItemDTO mapToDTO(String name, Boolean status) {
-        return new ListViewItemDTO(status, name);
+    public ListViewItemDTO mapToDTO(String name, Boolean status, Priority priority) {
+        return new ListViewItemDTO(status, name, priority);
     }
 
     public void setAppPriority(String appName, Enum priority){

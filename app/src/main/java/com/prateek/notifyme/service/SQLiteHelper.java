@@ -214,13 +214,13 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 
     public Cursor getEnableStatusForAppsDB(){
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.rawQuery("select "+APPLICATION_COL2 + ","+APPLICATION_COL3 +" from " + APPLICATION_TABLE_NAME, null);
+        return db.rawQuery("select "+APPLICATION_COL2 + ","+APPLICATION_COL3+","+APPLICATION_COL5+" from " + APPLICATION_TABLE_NAME, null);
     }
 
     public boolean setAppPriorityDB(String appName, Enum priority){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(APPLICATION_COL3, priority.name());
+        values.put(APPLICATION_COL5, priority.name());
         long result = db.update(APPLICATION_TABLE_NAME, values, APPLICATION_COL2 +" = ?", new String[]{appName});
         if (result <=0)
             return false;
