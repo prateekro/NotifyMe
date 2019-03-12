@@ -149,7 +149,11 @@ public class MainActivity extends AppCompatActivity {
 
 //
 //            }
-//        });
+//        }]]['
+
+
+        //test archive storage
+        NotificationService.archiveNotification("sam@gy.com", "com.whatsapp", "Whatsapp", "Test notify","2345678901");
 
         //get archived notification code
         ValueEventListener postListener = new ValueEventListener() {
@@ -159,16 +163,11 @@ public class MainActivity extends AppCompatActivity {
 //                NotificationBean notification = dataSnapshot.getValue(NotificationBean.class);
 //                HashMap map = dataSnapshot.getValue(HashMap.class);
                 Map<String, Object> map = (Map<String, Object>) dataSnapshot.getValue();
-                // [START_EXCLUDE]
-//                mAuthorView.setText(post.author);
-//                mTitleView.setText(post.title);
-//                mBodyView.setText(post.body);
                 System.out.println("### YeP! ");
                 for (Object key : map.keySet()) {
                     System.out.println("//// "+map.get(key));
+                    // Set data in View list
                 }
-
-                // [END_EXCLUDE]
             }
 
             @Override
@@ -179,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
         };
         mPostReference.addValueEventListener(postListener);
         mPostListener = postListener;
-
     }
 
     @Override

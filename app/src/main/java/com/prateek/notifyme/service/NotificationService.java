@@ -22,6 +22,7 @@ public class NotificationService {
 
     SQLiteHelper mDatabaseHelper;
     Context mContext;
+    static DatabaseReference firebaseNotificationReference;
 
     public NotificationService(Context applicationContext) {
         this.mContext = applicationContext;
@@ -155,30 +156,37 @@ public class NotificationService {
         }
     }
 
-    public void archiveNotification() {
+    public static void archiveNotification(String userid, String appId, String appName, String text, String timestamp) {
         // Write a message to the database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("notifications");
-//        myRef.setValue("Hello, World!");
-//        myRef.setValue("Check instance");
-        myRef.child("user1").child("txt").setValue("text 2");
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database.getReference("notifications");
+
+        //remove dot from email as firebase does not support it
+        userid = userid.replace(".", "");
+        firebaseNotificationReference = FirebaseDatabase.getInstance().getReference().child("notifications").child(userid);
+        String key = firebaseNotificationReference.push().getKey();
+        System.out.println(">>>>> Index: "+key);
+        firebaseNotificationReference.child(key).child("appid").setValue(appId);
+        firebaseNotificationReference.child(key).child("appname").setValue(appName);
+        firebaseNotificationReference.child(key).child("timestamp").setValue(timestamp);
+        firebaseNotificationReference.child(key).child("txt").setValue(text);
 
         // Read from the database
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-//                String value = dataSnapshot.getValue(String.class);
-//                System.out.println("Value is: " + value);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                System.out.println("Failed to read value."+ error.toException());
-            }
-        });
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                // This method is called once with the initial value and again
+//                // whenever data at this location is updated.
+////                String value = dataSnapshot.getValue(String.class);
+////                System.out.println("Value is: " + value);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError error) {
+//                // Failed to read value
+//                System.out.println("Failed to read value."+ error.toException());
+//            }
+//        });
     }
 
 }
