@@ -72,9 +72,9 @@ public class NotificationListing extends AppCompatActivity {
 
         tv_appname.setText(pageTitle);
 
-        Log.d(TAG, "APP COLOR$$: "+getAppColor(NotificationListing.this, pagePKG));
+        Log.d(TAG, "APP COLOR$$: " + getAppColor(NotificationListing.this, pagePKG));
         int appColor = getAppColor(NotificationListing.this, pagePKG);
-        if (appColor != -1){
+        if (appColor != -1) {
             tv_appname.setTextColor(appColor);
         }
 
@@ -96,16 +96,27 @@ public class NotificationListing extends AppCompatActivity {
 
         LayoutAnimationController controller = AnimationUtils.loadLayoutAnimation(getApplicationContext(), R.anim.rv_layout_animation);
         lv_listing.setLayoutAnimation(controller);
+
+        AdapterView.OnItemLongClickListener itemClickListener = new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Log.d(TAG, "onItemLongClick: LONG CLICKED at: "+position);
+                return false;
+            }
+
+        };
+
+        lv_listing.setOnItemLongClickListener(itemClickListener);
+
         lv_listing.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
-
+                Log.d(TAG, "onItemClick: CLICKED at: " + position);
             }
         });
 
     }
-
 
     private void TimerMethod() {
         //This method is called directly by the timer and runs in the same thread as the timer.

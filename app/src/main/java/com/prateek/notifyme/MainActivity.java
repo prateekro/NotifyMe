@@ -1,11 +1,14 @@
 package com.prateek.notifyme;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
@@ -27,6 +30,8 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.prateek.notifyme.commons.utils.TAG;
+
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -41,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fabMenu;
     Timer timerHandler;
     TimerTask timedNotificationUpdate;
+    private static final int DEFAULT_THRESHOLD = 128;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
