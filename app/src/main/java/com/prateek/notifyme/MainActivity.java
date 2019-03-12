@@ -1,15 +1,17 @@
 package com.prateek.notifyme;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,14 +26,18 @@ import com.prateek.notifyme.beans.NotificationBean;
 import com.prateek.notifyme.commons.MySharedPreference;
 import com.prateek.notifyme.commons.utils;
 import com.prateek.notifyme.elements.ListElement;
+import com.prateek.notifyme.elements.SingleListElement;
 import com.prateek.notifyme.service.NotificationService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static com.prateek.notifyme.commons.utils.TAG;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -47,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton fabMenu;
     Timer timerHandler;
     TimerTask timedNotificationUpdate;
+    private static final int DEFAULT_THRESHOLD = 128;
+
 
     private DatabaseReference mPostReference;
     private ValueEventListener mPostListener;
@@ -125,9 +133,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 ListElement listElement = appList.get(position);
-                Toast.makeText(MainActivity.this, listElement.getAppName() +" :: date "+ listElement.getDate(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Taking you to notifications of "+listElement.getAppName(), Toast.LENGTH_SHORT).show();
                 Intent openNotificationListing = new Intent(getApplicationContext(), NotificationListing.class);
                 openNotificationListing.putExtra("TITLE", listElement.getAppName());
+                openNotificationListing.putExtra("PKG", listElement.getAppID());
                 startActivity(openNotificationListing);
                 overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left);
             }
@@ -246,7 +255,8 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(utils.TAG, "%%%%%%%: UPDATE CALLED");
         NotificationService notificationService = new NotificationService(getApplicationContext());
-        HashMap<String, Integer> myAllNotifications = notificationService.getAllNotifications();
+//        HashMap<String, Integer> myAllNotifications = notificationService.getAllNotifications();
+        HashMap<String, ArrayList<String>> myAllNotifications = notificationService.getAllNotifications();
         Set appNames = myAllNotifications.keySet();
         Log.d(utils.TAG, "%%%%%%%: KEYS "+ appNames);
         int i=0;
@@ -254,12 +264,16 @@ public class MainActivity extends AppCompatActivity {
             if (i == 0){
                 appList.clear();
             }
-            Log.d(utils.TAG, "onClick: App: "+ appName.toString()+" Unread: "+myAllNotifications.get(appName));
-            listElements  = new ListElement(" ", " ", appName.toString(), myAllNotifications.get(appName).toString());
+            Log.d(utils.TAG, "onClick: App: "+ appName.toString()+
+                    " Unread: " + myAllNotifications.get(appName).get(0).toString() +
+                    ":: Package: "+ myAllNotifications.get(appName).get(1).toString());
+
+            listElements  = new ListElement(" ", " ", appName.toString(), myAllNotifications.get(appName).get(0).toString(), myAllNotifications.get(appName).get(1).toString());
             appList.add(listElements);
             i++;
         }
 
+        Collections.sort(appList, ListElement.lsCounter);
         applistadapter.notifyDataSetInvalidated();
         applistadapter.notifyDataSetChanged();
 
