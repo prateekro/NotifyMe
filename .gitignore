@@ -113,3 +113,9 @@ gradle-app.setting
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
 
+# connect from google service for firebase
+google-services.json
+
+# mac-os extras
+.DS_Store
+*.DS_Store
