@@ -23,7 +23,6 @@ Features:
 ### Screenshots
 
 #### Dashboard
-[![Dashboard](https://github.com/prateekro/letmefeed/blob/master/screenshots/dashboard.png)](https://github.com/prateekro/letmefeed/blob/master/screenshots/dashboard.png)
 <p align="center">
   <img src="https://github.com/prateekro/letmefeed/blob/master/screenshots/dashboard.png" height="350" title="Dashboard">
 </p>
