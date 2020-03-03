@@ -17,26 +17,37 @@ Features:
  - Live bug free! Enjoy the day without being bugged at odd times.
  
  - Make the notifications live the way you want them. Not the way companies want you to ;)
- 
- ### Screenshots
+
+---
+
+### Screenshots
 
 #### Dashboard
 [![Dashboard](https://github.com/prateekro/letmefeed/blob/master/screenshots/dashboard.png)](https://github.com/prateekro/letmefeed/blob/master/screenshots/dashboard.png)
+<p align="center">
+  <img src="https://github.com/prateekro/letmefeed/blob/master/screenshots/dashboard.png" height="350" title="Dashboard">
+</p>
 
 #### Individual app dashboard
-[![Individual app dashboard](https://github.com/prateekro/letmefeed/blob/master/screenshots/individual%20app%20dashboard.png)](https://github.com/prateekro/letmefeed/blob/master/screenshots/individual%20app%20dashboard.png)
+<p align="center">
+  <img src="https://github.com/prateekro/letmefeed/blob/master/screenshots/individual%20app%20dashboard.png" height="350" title="Individual app dashboard">
+</p>
 
 #### Individual application configuration
-
-[![App configuration](https://github.com/prateekro/letmefeed/blob/master/screenshots/configure%20apps.png)](https://github.com/prateekro/letmefeed/blob/master/screenshots/configure%20apps.png)
+<p align="center">
+  <img src="https://github.com/prateekro/letmefeed/blob/master/screenshots/configure%20apps.png" height="350" title="App configuration">
+</p>
 
 #### Read full message
-
-[![Read full individual message](https://github.com/prateekro/letmefeed/blob/master/screenshots/read%20a%20message.png)](https://github.com/prateekro/letmefeed/blob/master/screenshots/read%20a%20message.png)
+<p align="center">
+  <img src="https://github.com/prateekro/letmefeed/blob/master/screenshots/read%20a%20message.png" height="350" title="Read full individual message" alt="Read full individual message">
+</p>
 
 #### Feature access
+<p align="center">
+  <img src="https://github.com/prateekro/letmefeed/blob/master/screenshots/feature%20access.png" height="350" title="Read full individual message" alt="Read full individual message">
+</p>
 
-[![Read full individual message](https://github.com/prateekro/letmefeed/blob/master/screenshots/feature%20access.png)](https://github.com/prateekro/letmefeed/blob/master/screenshots/feature%20access.png)
-
+---
 
 
